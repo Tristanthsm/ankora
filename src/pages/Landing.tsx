@@ -8,6 +8,7 @@ import Avatar from '../components/Avatar'
 import Badge from '../components/Badge'
 import { BackgroundPaths } from '../components/BackgroundPaths'
 import { mentors, testimonials, stats, processSteps } from '../data/mock'
+import { TestimonialsSection } from '../components/TestimonialsSection'
 
 export default function Landing() {
   return (
@@ -98,24 +99,19 @@ export default function Landing() {
           </div>
         </section>
 
-        {/* Testimonials */}
-        <section className="space-y-10">
-          <SectionHeader eyebrow="Ils ont réussi" title="Des étudiants accompagnés partout dans le monde" />
-          <div className="grid md:grid-cols-3 gap-6">
-            {testimonials.map((testimonial) => (
-              <Card key={testimonial.id}>
-                <div className="flex items-center justify-between mb-3">
-                  <div>
-                    <p className="font-semibold text-gray-900">{testimonial.name}</p>
-                    <p className="text-sm text-gray-600">{testimonial.role}</p>
-                  </div>
-                  <Badge color="primary">{testimonial.country}</Badge>
-                </div>
-                <p className="text-gray-700 leading-relaxed">“{testimonial.quote}”</p>
-              </Card>
-            ))}
-          </div>
-        </section>
+        <TestimonialsSection
+          className="rounded-2xl bg-gray-50"
+          title="Des étudiants accompagnés partout dans le monde"
+          description="Mentors locaux, pratique intensive des entretiens, et conseils personnalisés pour décrocher votre prochaine opportunité."
+          testimonials={testimonials.map((testimonial) => ({
+            author: {
+              name: testimonial.name,
+              role: testimonial.role,
+              country: testimonial.country,
+            },
+            text: testimonial.quote,
+          }))}
+        />
 
         {/* CTA */}
         <section className="bg-primary-700 text-white rounded-2xl p-10 flex flex-col md:flex-row items-center justify-between gap-6">
