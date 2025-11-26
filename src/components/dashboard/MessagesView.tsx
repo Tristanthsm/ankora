@@ -159,11 +159,6 @@ export default function MessagesView({
             <h3 className="font-semibold mb-4">Conversations</h3>
             <div className="space-y-2">
               {requests.map((request) => {
-                const otherUserId =
-                  userRole === 'student'
-                    ? request.mentor_id
-                    : request.student_id
-
                 return (
                   <button
                     key={request.id}

@@ -84,30 +84,28 @@ Le projet sera accessible sur `http://localhost:5173` (ou un autre port si 5173 
 ```
 ankora/
 ├── src/
-│   ├── components/          # Composants réutilisables
-│   │   ├── Button.tsx      # Bouton avec variantes
-│   │   ├── Card.tsx        # Container de contenu
-│   │   ├── Input.tsx       # Champ de formulaire
-│   │   ├── ProtectedRoute.tsx  # Protection des routes
-│   │   └── dashboard/      # Composants spécifiques aux dashboards
-│   │       ├── StudentDashboard.tsx
-│   │       ├── MentorDashboard.tsx
-│   │       ├── MentorSearch.tsx
-│   │       ├── RequestsList.tsx
-│   │       └── MessagesView.tsx
-│   ├── lib/                # Utilitaires et configuration
-│   │   ├── supabase.ts     # Client Supabase + types
-│   │   └── auth.tsx        # Contexte d'authentification
-│   ├── pages/              # Pages de l'application
-│   │   ├── Landing.tsx     # Page d'accueil publique
-│   │   ├── Login.tsx       # Connexion
-│   │   ├── Register.tsx    # Inscription
-│   │   ├── Onboarding.tsx # Complétion du profil
-│   │   └── Dashboard.tsx  # Tableau de bord principal
-│   ├── App.tsx             # Composant racine + routage
-│   ├── main.tsx            # Point d'entrée
-│   └── index.css           # Styles globaux Tailwind
-├── supabase-schema.sql     # Schéma de base de données
+│   ├── components/              # Composants réutilisables
+│   │   ├── layout/              # Navbar/Footer
+│   │   ├── dashboard/           # Composants historiques liés aux dashboards
+│   │   ├── Button.tsx           # Bouton avec variantes
+│   │   ├── Card.tsx             # Container de contenu
+│   │   ├── Input.tsx            # Champ de formulaire
+│   │   ├── Badge.tsx            # Tags de statut/expertise
+│   │   ├── SectionHeader.tsx    # Titres de section consistants
+│   │   └── ProtectedRoute.tsx   # Protection des routes
+│   ├── data/                    # Données mock (mentors, FAQs...)
+│   ├── lib/                     # Utilitaires et configuration
+│   │   ├── supabase.ts          # Client Supabase + types
+│   │   └── auth.tsx             # Contexte d'authentification
+│   ├── pages/                   # Pages de l'application
+│   │   ├── public (Landing/About/FAQ...)
+│   │   ├── student/             # Espace étudiant (dashboard, recherche, profil)
+│   │   ├── mentor/              # Espace mentor (demandes, messages, profil)
+│   │   └── messages/            # Pages conversation
+│   ├── App.tsx                  # Composant racine + routage
+│   ├── main.tsx                 # Point d'entrée
+│   └── index.css                # Styles globaux Tailwind
+├── supabase-schema.sql          # Schéma de base de données
 ├── package.json
 ├── vite.config.ts
 ├── tailwind.config.js
@@ -117,8 +115,9 @@ ankora/
 ## 🎯 Fonctionnalités
 
 ### Zone Publique
-- Page d'accueil avec présentation de la plateforme
-- Navigation vers authentification
+- Page d'accueil enrichie (statistiques, témoignages, CTA étudiants/mentors)
+- Pages "À propos", "Comment ça marche", "Devenir mentor" et "FAQ"
+- Footer complet (confiance, contact) + navigation claire
 
 ### Authentification
 - Inscription avec email/mot de passe
@@ -132,14 +131,16 @@ ankora/
 - Redirection automatique si profil déjà complété
 
 ### Dashboard Étudiant
-- **Recherche de mentors** : Recherche et filtrage de mentors
-- **Mes requêtes** : Suivi des requêtes envoyées (pending/accepted/rejected)
-- **Messages** : Messagerie temps réel avec les mentors ayant accepté
+- Vue d’ensemble + KPI clés (demandes, messages, pays cibles)
+- Recherche mentors avec filtres pays/langues/expertise
+- Suivi des requêtes et messagerie listée par conversation
+- Profil étudiant éditable (université, objectifs, langues, CV)
 
 ### Dashboard Mentor
-- **Statistiques** : Vue d'ensemble des requêtes
-- **Requêtes reçues** : Gestion (accepter/refuser) des demandes
-- **Messages** : Messagerie temps réel avec les étudiants
+- Vue d’ensemble + KPI accompagnements
+- Gestion des demandes reçues et des étudiants actifs
+- Messagerie listée par conversation
+- Profil mentor (expertises, disponibilités, LinkedIn)
 
 ### Messagerie Temps Réel
 - Communication en temps réel via Supabase Realtime

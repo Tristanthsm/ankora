@@ -4,7 +4,7 @@ import { useAuth } from '../../lib/auth'
 import Button from '../Button'
 import Card from '../Card'
 import Input from '../Input'
-import { Search, MapPin, Briefcase, Languages } from 'lucide-react'
+import { MapPin, Briefcase, Languages } from 'lucide-react'
 
 /**
  * Composant de recherche de mentors
