@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom'
-import { Sparkles } from 'lucide-react'
 import Navbar from '../components/layout/Navbar'
 import Footer from '../components/layout/Footer'
 import Button from '../components/Button'
@@ -7,6 +6,7 @@ import Card from '../components/Card'
 import SectionHeader from '../components/SectionHeader'
 import Avatar from '../components/Avatar'
 import Badge from '../components/Badge'
+import { BackgroundPaths } from '../components/BackgroundPaths'
 import { mentors, testimonials, stats, processSteps } from '../data/mock'
 
 export default function Landing() {
@@ -14,66 +14,50 @@ export default function Landing() {
     <div className="bg-white min-h-screen">
       <Navbar />
 
-      <main className="container-custom pt-16 pb-24 space-y-24">
-        {/* Hero */}
-        <section className="grid lg:grid-cols-2 gap-12 items-center">
-          <div className="space-y-8">
-            <div className="inline-flex items-center space-x-2 bg-primary-50 text-primary-700 px-4 py-2 rounded-full text-sm font-semibold">
-              <Sparkles className="h-4 w-4" />
-              <span>Stage, VIE ou CDI à l’international</span>
-            </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
-              Trouvez votre mentor pour décrocher un stage ou un emploi à l’international
-            </h1>
-            <p className="text-lg text-gray-600">
-              ANKORA connecte les étudiants motivés avec des mentors locaux vérifiés. Un accompagnement humain pour naviguer les marchés internationaux, rédiger un CV percutant et réussir vos entretiens.
-            </p>
-            <div className="flex flex-wrap gap-4">
-              <Link to="/register">
-                <Button size="lg">Je suis étudiant</Button>
-              </Link>
-              <Link to="/become-mentor">
-                <Button size="lg" variant="outline">Je veux devenir mentor</Button>
-              </Link>
-            </div>
-            <div className="flex items-center gap-4 text-sm text-gray-600">
-              <Badge color="primary">Mentors vérifiés</Badge>
-              <Badge color="success">RLS Supabase activé</Badge>
-              <Badge color="muted">Support multilingue</Badge>
-            </div>
-          </div>
+      <BackgroundPaths
+        title="Trouvez votre mentor international"
+        subtitle="ANKORA connecte les étudiants motivés avec des mentors locaux vérifiés pour réussir chaque étape de leur parcours à l’étranger."
+        ctaLabel="Découvrir Ankora"
+        ctaHref="/register"
+      />
 
-          <Card className="relative overflow-hidden">
-            <div className="absolute -left-10 -top-10 h-32 w-32 bg-primary-100 rounded-full" aria-hidden />
-            <div className="absolute -right-14 -bottom-14 h-40 w-40 bg-secondary-100 rounded-full" aria-hidden />
-            <div className="relative grid gap-4">
-              {mentors.map((mentor) => (
-                <div key={mentor.id} className="p-4 border border-gray-100 rounded-xl bg-white/80 backdrop-blur">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <Avatar name={mentor.name} />
-                      <div>
-                        <p className="font-semibold text-gray-900">{mentor.name}</p>
-                        <p className="text-sm text-gray-600">{mentor.title}</p>
-                      </div>
+      <main className="container-custom pt-16 pb-24 space-y-24">
+        {/* Mentors */}
+        <section className="space-y-10">
+          <SectionHeader
+            eyebrow="Mentors vérifiés"
+            title="Un réseau de professionnels prêts à vous accompagner"
+            description="Parcourez des profils locaux validés par ANKORA pour préparer vos candidatures, vos entretiens et votre intégration dans un nouveau pays."
+          />
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {mentors.map((mentor) => (
+              <Card key={mentor.id} className="h-full bg-white/80 backdrop-blur">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <Avatar name={mentor.name} />
+                    <div>
+                      <p className="font-semibold text-gray-900">{mentor.name}</p>
+                      <p className="text-sm text-gray-600">{mentor.title}</p>
                     </div>
-                    <Badge color="primary">{mentor.country}</Badge>
                   </div>
-                  <p className="text-sm text-gray-600 mt-3">{mentor.bio}</p>
-                  <div className="flex flex-wrap gap-2 mt-3">
-                    {mentor.expertise.map((area) => (
-                      <Badge key={area} color="muted">{area}</Badge>
-                    ))}
-                  </div>
-                  <div className="mt-3 flex items-center gap-4 text-sm text-gray-700">
-                    <span className="font-semibold">{mentor.rating}★</span>
-                    <span>{mentor.availability}</span>
-                    <span className="text-primary-700 font-medium">Disponible</span>
-                  </div>
+                  <Badge color="primary">{mentor.country}</Badge>
                 </div>
-              ))}
-            </div>
-          </Card>
+                <p className="text-sm text-gray-600 mt-3">{mentor.bio}</p>
+                <div className="flex flex-wrap gap-2 mt-3">
+                  {mentor.expertise.map((area) => (
+                    <Badge key={area} color="muted">
+                      {area}
+                    </Badge>
+                  ))}
+                </div>
+                <div className="mt-4 flex items-center gap-4 text-sm text-gray-700">
+                  <span className="font-semibold">{mentor.rating}★</span>
+                  <span>{mentor.availability}</span>
+                  <span className="text-primary-700 font-medium">Disponible</span>
+                </div>
+              </Card>
+            ))}
+          </div>
         </section>
 
         {/* Stats */}
