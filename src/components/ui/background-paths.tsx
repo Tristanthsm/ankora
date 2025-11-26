@@ -1,8 +1,14 @@
 import { useMemo, type ReactNode } from 'react'
-import { motion } from 'framer-motion'
+
+interface AnimatedPath {
+  id: number
+  d: string
+  width: number
+  delay: number
+}
 
 function FloatingPaths({ position }: { position: number }) {
-  const paths = useMemo(
+  const paths = useMemo<AnimatedPath[]>(
     () =>
       Array.from({ length: 36 }, (_, i) => ({
         id: i,
@@ -11,7 +17,7 @@ function FloatingPaths({ position }: { position: number }) {
         } ${216 - i * 6} ${152 - i * 5 * position} ${343 - i * 6}C${616 - i * 5 * position} ${470 -
           i * 6} ${684 - i * 5 * position} ${875 - i * 6} ${684 - i * 5 * position} ${875 - i * 6}`,
         width: 0.5 + i * 0.03,
-        duration: 20 + (i % 12),
+        delay: i * 0.25,
       })),
     [position]
   )
@@ -21,22 +27,16 @@ function FloatingPaths({ position }: { position: number }) {
       <svg className="w-full h-full text-slate-950 dark:text-white" viewBox="0 0 696 316" fill="none">
         <title>Background Paths</title>
         {paths.map((path) => (
-          <motion.path
+          <path
             key={path.id}
             d={path.d}
             stroke="currentColor"
             strokeWidth={path.width}
             strokeOpacity={0.1 + path.id * 0.03}
-            initial={{ pathLength: 0.3, opacity: 0.6 }}
-            animate={{
-              pathLength: 1,
-              opacity: [0.3, 0.6, 0.3],
-              pathOffset: [0, 1],
-            }}
-            transition={{
-              duration: path.duration,
-              repeat: Number.POSITIVE_INFINITY,
-              ease: 'linear',
+            className="animated-path"
+            style={{
+              animationDelay: `${path.delay}s`,
+              strokeDasharray: '280',
             }}
           />
         ))}
