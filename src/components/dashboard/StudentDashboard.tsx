@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react'
 import { supabase, Profile, Request } from '../../lib/supabase'
 import { useAuth } from '../../lib/auth'
-import Button from '../Button'
-import Card from '../Card'
 import MentorSearch from './MentorSearch'
 import RequestsList from './RequestsList'
 import MessagesView from './MessagesView'

@@ -3,7 +3,7 @@ import { supabase, Request, Profile } from '../../lib/supabase'
 import { useAuth } from '../../lib/auth'
 import Button from '../Button'
 import Card from '../Card'
-import { Clock, Check, X, User } from 'lucide-react'
+import { Check, X, User } from 'lucide-react'
 
 /**
  * Liste des requêtes
