@@ -99,7 +99,7 @@ export default function Marketplace() {
     })
 
     return (
-        <div className="bg-gray-50 min-h-screen">
+        <div className="min-h-screen bg-gray-50">
             <Header />
 
             <main className="container-custom pt-32 pb-20">
@@ -118,7 +118,7 @@ export default function Marketplace() {
                             <input
                                 type="text"
                                 placeholder="Rechercher par nom, rôle ou ville..."
-                                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                             />
@@ -129,9 +129,9 @@ export default function Marketplace() {
                                 <button
                                     key={filter}
                                     onClick={() => setSelectedExpertise(filter === 'Tech' ? 'React' : filter === 'Product' ? 'Product Management' : filter)} // Simplification pour la démo
-                                    className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${(selectedExpertise === filter || (filter === 'Tous' && selectedExpertise === 'Tous'))
-                                        ? 'bg-blue-600 text-white'
-                                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                    className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors border ${(selectedExpertise === filter || (filter === 'Tous' && selectedExpertise === 'Tous'))
+                                        ? 'bg-blue-600 text-white border-blue-600'
+                                        : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
                                         }`}
                                 >
                                     {filter}
@@ -184,7 +184,7 @@ export default function Marketplace() {
                                     <span className="font-bold text-gray-900">{mentor.rating}</span>
                                     <span className="text-gray-400 text-sm">({mentor.reviews})</span>
                                 </div>
-                                <Button size="sm" variant="outline">Contacter</Button>
+                                <Button size="sm" variant="outline" className="border-gray-200 hover:bg-gray-50 text-gray-700">Contacter</Button>
                             </div>
                         </Card>
                     ))}
@@ -196,7 +196,7 @@ export default function Marketplace() {
                         <Button
                             variant="link"
                             onClick={() => { setSearchTerm(''); setSelectedExpertise('Tous') }}
-                            className="mt-2"
+                            className="mt-2 text-blue-600 hover:text-blue-700"
                         >
                             Réinitialiser les filtres
                         </Button>

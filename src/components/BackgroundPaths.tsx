@@ -1,5 +1,7 @@
+"use client";
+
 import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/Button";
 
 function FloatingPaths({ position }: { position: number }) {
   const paths = Array.from({ length: 36 }, (_, i) => ({
@@ -45,8 +47,8 @@ function FloatingPaths({ position }: { position: number }) {
   );
 }
 
-export default function BackgroundPaths({
-  title = "ANKORA",
+export function BackgroundPaths({
+  title = "Background Paths",
 }: {
   title?: string;
 }) {
@@ -66,7 +68,7 @@ export default function BackgroundPaths({
           transition={{ duration: 2 }}
           className="max-w-4xl mx-auto"
         >
-          <h1 className="text-5xl sm:text-7xl md:text-8xl font-bold mb-6 tracking-tighter">
+          <h1 className="text-5xl sm:text-7xl md:text-8xl font-bold mb-8 tracking-tighter">
             {words.map((word, wordIndex) => (
               <span
                 key={wordIndex}
@@ -96,47 +98,29 @@ export default function BackgroundPaths({
             ))}
           </h1>
 
-          <p className="text-lg sm:text-xl text-neutral-700 dark:text-neutral-300 mb-10">
-            La seule plateforme qui vous permet de monétiser vos contacts.
-          </p>
-
-          <div className="flex flex-wrap justify-center gap-4">
-            <div
-              className="inline-block group relative bg-gradient-to-b from-black/10 to-white/10
-                        dark:from-white/10 dark:to-black/10 p-px rounded-2xl backdrop-blur-lg
+          <div
+            className="inline-block group relative bg-gradient-to-b from-black/10 to-white/10 
+                        dark:from-white/10 dark:to-black/10 p-px rounded-2xl backdrop-blur-lg 
                         overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
-            >
-              <Button
-                variant="ghost"
-                className="rounded-[1.15rem] px-8 py-6 text-lg font-semibold backdrop-blur-md
-                            bg-white/95 hover:bg-white/100 dark:bg-black/95 dark:hover:bg-black/100
-                            text-black dark:text-white transition-all duration-300
+          >
+            <Button
+              variant="ghost"
+              className="rounded-[1.15rem] px-8 py-6 text-lg font-semibold backdrop-blur-md 
+                            bg-white/95 hover:bg-white/100 dark:bg-black/95 dark:hover:bg-black/100 
+                            text-black dark:text-white transition-all duration-300 
                             group-hover:-translate-y-0.5 border border-black/10 dark:border-white/10
                             hover:shadow-md dark:hover:shadow-neutral-800/50"
-              >
-                <span className="opacity-90 group-hover:opacity-100 transition-opacity">
-                  Je cherche un stage
-                </span>
-              </Button>
-            </div>
-            <div
-              className="inline-block group relative bg-gradient-to-b from-black/10 to-white/10
-                        dark:from-white/10 dark:to-black/10 p-px rounded-2xl backdrop-blur-lg
-                        overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
             >
-              <Button
-                variant="ghost"
-                className="rounded-[1.15rem] px-8 py-6 text-lg font-semibold backdrop-blur-md
-                            bg-white/95 hover:bg-white/100 dark:bg-black/95 dark:hover:bg-black/100
-                            text-black dark:text-white transition-all duration-300
-                            group-hover:-translate-y-0.5 border border-black/10 dark:border-white/10
-                            hover:shadow-md dark:hover:shadow-neutral-800/50"
+              <span className="opacity-90 group-hover:opacity-100 transition-opacity">
+                Discover Excellence
+              </span>
+              <span
+                className="ml-3 opacity-70 group-hover:opacity-100 group-hover:translate-x-1.5 
+                                transition-all duration-300"
               >
-                <span className="opacity-90 group-hover:opacity-100 transition-opacity">
-                  Je propose mes services
-                </span>
-              </Button>
-            </div>
+                →
+              </span>
+            </Button>
           </div>
         </motion.div>
       </div>

@@ -17,15 +17,15 @@ export function TestimonialCard({ author, text, href, className }: TestimonialCa
   const content = (
     <article
       className={cn(
-        'flex h-full w-[280px] flex-col justify-between rounded-2xl border border-gray-200 bg-white p-4 text-left shadow-sm transition-transform duration-200 hover:-translate-y-1 hover:shadow-md sm:w-[320px]',
+        'flex h-full w-[280px] flex-col justify-between rounded-2xl border border-gray-100 bg-white p-4 text-left shadow-sm transition-transform duration-200 hover:-translate-y-1 hover:shadow-md sm:w-[320px]',
         className
       )}
     >
-      <p className="text-sm leading-relaxed text-gray-700">“{text}”</p>
+      <p className="text-sm leading-relaxed text-gray-600">“{text}”</p>
       <div className="mt-4 border-t border-gray-100 pt-3">
         <p className="font-semibold text-gray-900">{author.name}</p>
-        <p className="text-sm text-gray-600">{author.role}</p>
-        {author.country ? <p className="text-xs text-gray-500">{author.country}</p> : null}
+        <p className="text-sm text-gray-500">{author.role}</p>
+        {author.country ? <p className="text-xs text-gray-400">{author.country}</p> : null}
       </div>
     </article>
   )

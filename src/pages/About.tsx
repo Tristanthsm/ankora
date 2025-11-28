@@ -24,7 +24,7 @@ const team = [
 
 export default function About() {
   return (
-    <div className="bg-white min-h-screen">
+    <div className="min-h-screen bg-white">
       <Header />
       <main className="container-custom pt-32 pb-20 space-y-24">
 
@@ -50,11 +50,11 @@ export default function About() {
               L'expatriation est un accélérateur de carrière et de développement personnel. Nous la rendons accessible, sécurisée et humaine.
             </p>
           </div>
-          <div className="relative h-[400px] rounded-2xl overflow-hidden shadow-xl">
+          <div className="relative h-[400px] rounded-2xl overflow-hidden shadow-xl border border-gray-100">
             <img
               src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
               alt="Étudiants travaillant ensemble"
-              className="absolute inset-0 w-full h-full object-cover"
+              className="absolute inset-0 w-full h-full object-cover hover:scale-105 transition-transform duration-700"
             />
           </div>
         </section>
