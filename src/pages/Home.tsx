@@ -1,5 +1,5 @@
-import { BackgroundPaths } from '@/components/ui/background-paths'
+import { Ankora } from '@/components/ui/background-paths'
 
 export default function Home() {
-  return <BackgroundPaths title="ANKORA" />
+  return <Ankora title="ANKORA" />
 }
