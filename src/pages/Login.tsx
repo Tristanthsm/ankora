@@ -4,7 +4,6 @@ import { useAuth } from '../lib/auth'
 import Button from '../components/Button'
 import Input from '../components/Input'
 import { AuthLayout } from '../components/auth/AuthLayout'
-import { Github } from 'lucide-react'
 
 const GoogleIcon = (props: React.ComponentProps<'svg'>) => (
   <svg
@@ -80,10 +79,6 @@ export default function Login() {
         <Button type="button" variant="outline" className="w-full justify-start" onClick={() => { }}>
           <AppleIcon className='size-4 me-2' />
           Continuer avec Apple
-        </Button>
-        <Button type="button" variant="outline" className="w-full justify-start" onClick={() => { }}>
-          <Github className='size-4 me-2' />
-          Continuer avec GitHub
         </Button>
       </div>
 

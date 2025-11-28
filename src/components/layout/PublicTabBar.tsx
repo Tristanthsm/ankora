@@ -17,12 +17,13 @@ export default function PublicTabBar() {
   const { user } = useAuth()
   const location = useLocation()
   const [activeTab, setActiveTab] = useState(location.pathname)
+  const hiddenRoutes = ['/login', '/register']
 
   useEffect(() => {
     setActiveTab(location.pathname)
   }, [location])
 
-  if (user) return null
+  if (user || hiddenRoutes.some((route) => location.pathname.startsWith(route))) return null
 
   return (
     <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 sm:top-6 sm:bottom-auto">
