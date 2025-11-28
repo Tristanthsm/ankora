@@ -21,7 +21,7 @@ function FloatingPaths({ position }: { position: number }) {
         viewBox="0 0 696 316"
         fill="none"
       >
-        <title>Background Paths</title>
+        <title>Ankora</title>
         {paths.map((path) => (
           <motion.path
             key={path.id}
@@ -47,8 +47,8 @@ function FloatingPaths({ position }: { position: number }) {
   );
 }
 
-export function BackgroundPaths({
-  title = "Background Paths",
+export function Ankora({
+  title = "Ankora",
 }: {
   title?: string;
 }) {

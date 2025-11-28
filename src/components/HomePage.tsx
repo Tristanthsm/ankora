@@ -1,5 +1,5 @@
 import Header from "./Header"
-import { BackgroundPaths } from "./BackgroundPaths"
+import { Ankora } from "./BackgroundPaths"
 import FeaturesSection from "./FeaturesSection"
 import { TestimonialsSection } from "./TestimonialsSection"
 import Footer from "./Footer"
@@ -44,7 +44,7 @@ export default function HomePage() {
         <div className="min-h-screen bg-white">
             <Header />
             <main>
-                <BackgroundPaths />
+                <Ankora />
                 <FeaturesSection />
                 <TestimonialsSection
                     title="Ils nous font confiance"
