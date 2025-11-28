@@ -1,3 +1,8 @@
+import Header from "./Header"
+import { Ankora } from "./BackgroundPaths"
+import FeaturesSection from "./FeaturesSection"
+import { TestimonialsSection } from "./TestimonialsSection"
+import Footer from "./Footer"
 import CityAccordion from "./CityAccordion"
 
 export default function HomePage() {
