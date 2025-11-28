@@ -61,6 +61,8 @@ export default function StudentOnboardingForm() {
                     target_sectors: [],
                     languages: []
                 })
+                .select()
+                .single()
 
             if (detailsError) throw detailsError
 
@@ -68,7 +70,7 @@ export default function StudentOnboardingForm() {
             navigate('/dashboard')
         } catch (error: any) {
             console.error('Error submitting student onboarding:', error)
-            setSubmitError(error.message || 'Une erreur est survenue lors de la soumission. Veuillez réessayer.')
+            setSubmitError('Une erreur est survenue lors de l’enregistrement de votre profil. Veuillez réessayer dans quelques instants.')
         } finally {
             setLoading(false)
         }
