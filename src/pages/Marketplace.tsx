@@ -19,6 +19,7 @@ import SectionHeader from '../components/SectionHeader'
 import Card from '../components/Card'
 import Button from '../components/Button'
 import Badge from '../components/Badge'
+import MentorProfileView from '../components/marketplace/MentorProfileView'
 import {
     countryOptions,
     experienceRanges,
@@ -527,16 +528,9 @@ export default function Marketplace() {
                                             {mentor.badge && <Badge color="secondary" className="text-xs">{mentor.badge}</Badge>}
                                         </div>
                                         <p className="text-sm text-gray-600">{mentor.role} · {mentor.company}</p>
-                                        <div className="flex items-center gap-2 text-xs text-gray-500 mt-1">
-                                            <Globe2 className="h-3.5 w-3.5" />
-                                            {mentor.languages.join(' · ')}
-                                        </div>
                                     </div>
                                 </div>
                                 <div className="flex flex-col items-end gap-2">
-                                    <div className={`px-2 py-1 rounded-full text-[11px] font-semibold ${mentor.available ? 'bg-green-50 text-green-700 border border-green-100' : 'bg-yellow-50 text-yellow-700 border border-yellow-100'}`}>
-                                        {mentor.available ? 'Disponible' : 'Bientôt dispo'}
-                                    </div>
                                     <button
                                         onClick={() => toggleFavorite(mentor.id)}
                                         className={`p-2 rounded-full border ${favorites.includes(mentor.id) ? 'bg-red-50 border-red-200 text-red-500' : 'border-gray-200 text-gray-400 hover:text-red-500 hover:border-red-200'}`}
@@ -555,42 +549,26 @@ export default function Marketplace() {
 
                                 <div className="flex flex-wrap gap-2">
                                     <Badge color="primary" className="bg-blue-50 text-blue-700 border-blue-100">{mentor.primaryHelp}</Badge>
-                                    {mentor.expertise.map((exp) => (
+                                    {mentor.expertise.slice(0, 2).map((exp) => (
                                         <Badge key={exp} color="secondary">{exp}</Badge>
                                     ))}
+                                    {mentor.expertise.length > 2 && <Badge color="secondary">+{mentor.expertise.length - 2}</Badge>}
                                 </div>
 
-                                <div className="grid grid-cols-3 gap-3 text-center">
-                                    <div className="p-3 rounded-lg bg-gray-50 border border-gray-100">
-                                        <p className="text-xs text-gray-500">Tarif</p>
-                                        <p className="font-semibold text-gray-900">{mentor.rate}€/h</p>
+                                <div className="flex items-center justify-between text-sm text-gray-600 pt-2">
+                                    <div className="flex items-center gap-1">
+                                        <Star className="h-4 w-4 text-yellow-400 fill-current" />
+                                        <span className="font-bold text-gray-900">{mentor.rating}</span>
+                                        <span className="text-gray-400">({mentor.reviews})</span>
                                     </div>
-                                    <div className="p-3 rounded-lg bg-gray-50 border border-gray-100">
-                                        <p className="text-xs text-gray-500">Réponse</p>
-                                        <p className="font-semibold text-gray-900">{mentor.responseTime}</p>
-                                    </div>
-                                    <div className="p-3 rounded-lg bg-gray-50 border border-gray-100">
-                                        <p className="text-xs text-gray-500">Sessions</p>
-                                        <p className="font-semibold text-gray-900">{mentor.sessions}</p>
-                                    </div>
+                                    <div className="font-bold text-gray-900">{mentor.rate}€<span className="text-gray-500 font-normal">/h</span></div>
                                 </div>
-                                <p className="text-xs text-gray-600 text-center">Score global : {mentor.rating}/5 – {mentor.reviews} avis</p>
                             </div>
 
-                            <div className="flex items-center justify-between text-sm text-gray-600 border-t border-gray-100 pt-4">
-                                <div className="flex items-center gap-2">
-                                    <Star className="h-4 w-4 text-yellow-400 fill-current" />
-                                    Réponse en {mentor.responseTime}
-                                </div>
-                                <div className="flex gap-2">
-                                    <Button size="sm" className="gap-1">
-                                        <MessageCircle className="h-4 w-4" />
-                                        Contacter
-                                    </Button>
-                                    <Button size="sm" variant="outline" className="border-gray-200 hover:bg-gray-50 text-gray-700" onClick={() => setSelectedMentor(mentor)}>
-                                        Voir le profil
-                                    </Button>
-                                </div>
+                            <div className="pt-4 border-t border-gray-100 mt-auto">
+                                <Button className="w-full" onClick={() => setSelectedMentor(mentor)}>
+                                    Voir le profil
+                                </Button>
                             </div>
                         </Card>
                     ))}
@@ -621,98 +599,7 @@ export default function Marketplace() {
             </main>
 
             {selectedMentor && (
-                <div className="fixed inset-0 z-40 flex items-center justify-center px-4">
-                    <div className="absolute inset-0 bg-black/50" onClick={() => setSelectedMentor(null)} />
-                    <div className="relative z-50 bg-white w-full max-w-3xl rounded-2xl shadow-2xl overflow-hidden">
-                        <div className="flex items-start justify-between p-6 border-b border-gray-100">
-                            <div className="flex items-center gap-4">
-                                <img src={selectedMentor.image} alt={selectedMentor.name} className="w-16 h-16 rounded-full object-cover" />
-                                <div className="space-y-1">
-                                    <div className="flex items-center gap-2">
-                                        <h2 className="text-2xl font-bold text-gray-900">{selectedMentor.name}</h2>
-                                        {selectedMentor.available && (
-                                            <span className="px-2 py-1 text-xs rounded-full bg-green-50 text-green-700 border border-green-100">Disponible</span>
-                                        )}
-                                    </div>
-                                    <p className="text-gray-600">{selectedMentor.role} · {selectedMentor.company}</p>
-                                    <div className="flex items-center gap-4 text-sm text-gray-500">
-                                        <span className="flex items-center gap-1"><MapPin className="h-4 w-4" /> {selectedMentor.city}, {selectedMentor.country}</span>
-                                        <span className="flex items-center gap-1"><Globe2 className="h-4 w-4" /> {selectedMentor.languages.join(' · ')}</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="text-right space-y-2">
-                                <div className="flex items-center justify-end gap-1 text-lg font-semibold text-gray-900">
-                                    <Star className="h-5 w-5 text-yellow-400 fill-current" /> {selectedMentor.rating}
-                                    <span className="text-sm text-gray-500">({selectedMentor.reviews} avis)</span>
-                                </div>
-                                <div className="text-sm text-gray-500">{selectedMentor.sessions} sessions accompagnées</div>
-                                <div className="flex gap-2 justify-end">
-                                    <Button variant="outline" className="border-gray-200 text-gray-700" onClick={() => toggleFavorite(selectedMentor.id)}>
-                                        <Heart className={`h-4 w-4 mr-2 ${favorites.includes(selectedMentor.id) ? 'fill-current text-red-500' : ''}`} />
-                                        {favorites.includes(selectedMentor.id) ? 'Retirer des favoris' : 'Ajouter aux favoris'}
-                                    </Button>
-                                    <Button onClick={() => setSelectedMentor(null)}>Fermer</Button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="grid md:grid-cols-3 gap-6 p-6">
-                            <div className="md:col-span-2 space-y-4">
-                                <div className="space-y-2">
-                                    <h3 className="text-lg font-semibold text-gray-900">Présentation</h3>
-                                    <p className="text-gray-600 leading-relaxed">{selectedMentor.bio}</p>
-                                </div>
-
-                                <div className="space-y-3">
-                                    <h4 className="text-sm font-semibold text-gray-800 uppercase">Expertises clés</h4>
-                                    <div className="flex flex-wrap gap-2">
-                                        {selectedMentor.expertise.map((exp) => (
-                                            <Badge key={exp} color="secondary">{exp}</Badge>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 flex items-start gap-3">
-                                    <Clock className="h-5 w-5 text-blue-600 mt-0.5" />
-                                    <div>
-                                        <p className="font-semibold text-blue-900">Réponse moyenne {selectedMentor.responseTime}</p>
-                                        <p className="text-sm text-blue-800">Réservez un créneau ou envoyez un message pour démarrer la conversation.</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="space-y-4">
-                                <div className="bg-gray-50 border border-gray-100 rounded-xl p-4 space-y-3">
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-gray-600">Tarif horaire</span>
-                                        <span className="text-xl font-bold text-gray-900">{selectedMentor.rate}€</span>
-                                    </div>
-                                    <div className="flex items-center justify-between text-sm text-gray-600">
-                                        <span>Réponse moyenne</span>
-                                        <span>{selectedMentor.responseTime}</span>
-                                    </div>
-                                    <div className="flex items-center justify-between text-sm text-gray-600">
-                                        <span>Sessions menées</span>
-                                        <span>{selectedMentor.sessions}</span>
-                                    </div>
-                                    <Button className="w-full mt-2">Demander une session</Button>
-                                </div>
-
-                                <div>
-                                    <h4 className="text-sm font-semibold text-gray-800 mb-2 uppercase">Créneaux disponibles</h4>
-                                    <div className="flex flex-wrap gap-2">
-                                        {selectedMentor.availabilitySlots.map((slot) => (
-                                            <span key={slot} className="px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm text-gray-700">
-                                                {slot}
-                                            </span>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <MentorProfileView mentor={selectedMentor} onClose={() => setSelectedMentor(null)} />
             )}
 
             <Footer />
