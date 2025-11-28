@@ -1,4 +1,3 @@
-```typescript
 import { useState, useEffect } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../lib/auth'
@@ -53,7 +52,7 @@ export default function Login() {
             {success}
           </div>
         )}
-        <AuthForm 
+        <AuthForm
           mode="login"
           onEmailSubmit={handleEmailSubmit}
           isLoading={isLoading}
@@ -64,4 +63,3 @@ export default function Login() {
     </div>
   )
 }
-```
