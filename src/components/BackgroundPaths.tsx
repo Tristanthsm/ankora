@@ -104,6 +104,7 @@ export function Ankora({
             >
               <Button
                 variant="ghost"
+                onClick={() => window.location.href = '/register'}
                 className="rounded-[1.15rem] px-8 py-6 text-lg font-semibold backdrop-blur-md
                               bg-white/95 hover:bg-white/100
                               text-black transition-all duration-300
@@ -122,6 +123,7 @@ export function Ankora({
             >
               <Button
                 variant="ghost"
+                onClick={() => window.location.href = '/register'}
                 className="rounded-[1.15rem] px-8 py-6 text-lg font-semibold backdrop-blur-md
                               bg-white/95 hover:bg-white/100
                               text-black transition-all duration-300

@@ -64,11 +64,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
    */
   useEffect(() => {
     // Récupère la session actuelle
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
       setSession(session)
       setUser(session?.user ?? null)
       if (session?.user) {
-        loadProfile(session.user.id)
+        await loadProfile(session.user.id)
       }
       setLoading(false)
     })
@@ -76,11 +76,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Écoute les changements d'authentification
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    } = supabase.auth.onAuthStateChange(async (_event, session) => {
       setSession(session)
       setUser(session?.user ?? null)
       if (session?.user) {
-        loadProfile(session.user.id)
+        await loadProfile(session.user.id)
       } else {
         setProfile(null)
       }

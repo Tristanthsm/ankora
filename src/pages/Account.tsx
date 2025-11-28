@@ -86,9 +86,33 @@ export default function Account() {
                         <div className="space-y-4">
                             {profile.role === 'student' ? (
                                 <>
+                                    <div className="grid md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-1">École</label>
+                                            <Input defaultValue={details.school} disabled className="bg-gray-50" />
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-1">Niveau</label>
+                                            <Input defaultValue={details.degree_level} disabled className="bg-gray-50" />
+                                        </div>
+                                    </div>
+                                    <div className="grid md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-1">Domaine</label>
+                                            <Input defaultValue={details.field_of_study} disabled className="bg-gray-50" />
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-1">Ville cible</label>
+                                            <Input defaultValue={details.target_city} disabled className="bg-gray-50" />
+                                        </div>
+                                    </div>
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1">École</label>
-                                        <Input defaultValue={details.school} disabled className="bg-gray-50" />
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">Objectif</label>
+                                        <textarea
+                                            defaultValue={details.objective}
+                                            disabled
+                                            className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 outline-none"
+                                        />
                                     </div>
                                     <div>
                                         <label className="block text-sm font-medium text-gray-700 mb-1">LinkedIn</label>
@@ -97,9 +121,25 @@ export default function Account() {
                                 </>
                             ) : (
                                 <>
+                                    <div className="grid md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-1">Entreprise</label>
+                                            <Input defaultValue={details.company} disabled className="bg-gray-50" />
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-1">Poste</label>
+                                            <Input defaultValue={details.current_position} disabled className="bg-gray-50" />
+                                        </div>
+                                    </div>
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1">Entreprise</label>
-                                        <Input defaultValue={details.company} disabled className="bg-gray-50" />
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">Formats de coaching</label>
+                                        <div className="flex flex-wrap gap-2 mt-1">
+                                            {details.coaching_formats?.map((format: string) => (
+                                                <span key={format} className="px-2 py-1 bg-green-50 text-green-700 rounded text-xs border border-green-100">
+                                                    {format}
+                                                </span>
+                                            ))}
+                                        </div>
                                     </div>
                                     <div>
                                         <label className="block text-sm font-medium text-gray-700 mb-1">LinkedIn</label>

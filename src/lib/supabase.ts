@@ -54,9 +54,12 @@ export type StudentDetails = {
   degree_level: string | null
   field_of_study: string | null
   target_countries: string[] | null
+  target_city: string | null
   target_sectors: string[] | null
   internship_type: string | null
   internship_duration: string | null
+  start_date: string | null
+  objective: string | null
   languages: string[] | null
   linkedin_url: string | null
   cv_url: string | null
@@ -74,6 +77,8 @@ export type MentorDetails = {
   expertise_sectors: string[] | null
   countries_network: string[] | null
   help_types: string[] | null
+  contact_types: string[] | null
+  coaching_formats: string[] | null
   linkedin_url: string | null
   proof_documents_url: string[] | null
   max_students_per_month: number | null

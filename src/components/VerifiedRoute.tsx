@@ -16,7 +16,7 @@ export default function VerifiedRoute({ children }: VerifiedRouteProps) {
     }
 
     if (!profile) {
-        return <Navigate to="/login" replace />
+        return <Navigate to="/onboarding" replace />
     }
 
     if (profile.status === 'pending_verification') {
