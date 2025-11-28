@@ -5,6 +5,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Onboarding from './pages/Onboarding'
 import Dashboard from './pages/Dashboard'
+import Account from './pages/Account'
 import About from './pages/About'
 import Marketplace from './pages/Marketplace'
 import HowItWorks from './pages/HowItWorks'
@@ -24,6 +25,7 @@ import MentorMessagesPage from './pages/mentor/Messages'
 import MentorProfilePage from './pages/mentor/Profile'
 import ConversationPage from './pages/messages/Conversation'
 import ProtectedRoute from './components/ProtectedRoute'
+import VerifiedRoute from './components/VerifiedRoute'
 import PublicTabBar from './components/layout/PublicTabBar'
 
 /**
@@ -39,7 +41,16 @@ function App() {
             {/* Route publique */}
             <Route path="/" element={<HomePage />} />
             <Route path="/about" element={<About />} />
-            <Route path="/marketplace" element={<Marketplace />} />
+            <Route
+              path="/marketplace"
+              element={
+                <ProtectedRoute>
+                  <VerifiedRoute>
+                    <Marketplace />
+                  </VerifiedRoute>
+                </ProtectedRoute>
+              }
+            />
             <Route path="/how-it-works" element={<HowItWorks />} />
             <Route path="/become-mentor" element={<BecomeMentor />} />
             <Route path="/faq" element={<FAQ />} />
@@ -61,7 +72,17 @@ function App() {
               path="/dashboard"
               element={
                 <ProtectedRoute>
-                  <Dashboard />
+                  <VerifiedRoute>
+                    <Dashboard />
+                  </VerifiedRoute>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/account"
+              element={
+                <ProtectedRoute>
+                  <Account />
                 </ProtectedRoute>
               }
             />
@@ -71,7 +92,9 @@ function App() {
               path="/student"
               element={
                 <ProtectedRoute>
-                  <StudentLayout />
+                  <VerifiedRoute>
+                    <StudentLayout />
+                  </VerifiedRoute>
                 </ProtectedRoute>
               }
             >
@@ -88,7 +111,9 @@ function App() {
               path="/mentor"
               element={
                 <ProtectedRoute>
-                  <MentorLayout />
+                  <VerifiedRoute>
+                    <MentorLayout />
+                  </VerifiedRoute>
                 </ProtectedRoute>
               }
             >

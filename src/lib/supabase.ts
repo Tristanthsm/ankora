@@ -34,6 +34,7 @@ export type Profile = {
   id: string
   user_id: string
   role: 'student' | 'mentor'
+  status: 'pending_verification' | 'under_review' | 'verified' | 'rejected'
   full_name: string | null
   bio: string | null
   country: string | null
@@ -42,6 +43,40 @@ export type Profile = {
   position: string | null
   languages: string[] | null
   expertise_areas: string[] | null
+  created_at: string
+  updated_at: string
+}
+
+export type StudentDetails = {
+  id: string
+  profile_id: string
+  school: string | null
+  degree_level: string | null
+  field_of_study: string | null
+  target_countries: string[] | null
+  target_sectors: string[] | null
+  internship_type: string | null
+  internship_duration: string | null
+  languages: string[] | null
+  linkedin_url: string | null
+  cv_url: string | null
+  student_proof_url: string | null
+  created_at: string
+  updated_at: string
+}
+
+export type MentorDetails = {
+  id: string
+  profile_id: string
+  current_position: string | null
+  company: string | null
+  experience_years: number | null
+  expertise_sectors: string[] | null
+  countries_network: string[] | null
+  help_types: string[] | null
+  linkedin_url: string | null
+  proof_documents_url: string[] | null
+  max_students_per_month: number | null
   created_at: string
   updated_at: string
 }
