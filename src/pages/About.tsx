@@ -1,26 +1,11 @@
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import SectionHeader from '../components/SectionHeader'
-import Card from '../components/Card'
 import Badge from '../components/Badge'
+import TeamSection from '../components/TeamSection'
+import { WorldMap } from '../components/ui/WorldMap'
 
-const team = [
-  {
-    name: 'Sarah Cohen',
-    role: 'CEO & Co-fondatrice',
-    image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'
-  },
-  {
-    name: 'David Chen',
-    role: 'CTO',
-    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'
-  },
-  {
-    name: 'Elena Rodriguez',
-    role: 'Head of Community',
-    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'
-  },
-]
+
 
 export default function About() {
   return (
@@ -36,6 +21,32 @@ export default function About() {
             description="Chez ANKORA, nous croyons que le talent est universel, mais que les opportunités ne le sont pas. Notre mission est de briser les barrières géographiques en connectant les étudiants ambitieux avec des mentors qui ont déjà réussi leur expatriation."
             align="center"
           />
+          <div className="mt-12">
+            <WorldMap
+              dots={[
+                {
+                  start: { lat: 48.8566, lng: 2.3522, label: "Paris" },
+                  end: { lat: 40.7128, lng: -74.0060, label: "New York" },
+                },
+                {
+                  start: { lat: 51.5074, lng: -0.1278, label: "Londres" },
+                  end: { lat: 1.3521, lng: 103.8198, label: "Singapour" },
+                },
+                {
+                  start: { lat: 52.5200, lng: 13.4050, label: "Berlin" },
+                  end: { lat: 37.7749, lng: -122.4194, label: "San Francisco" },
+                },
+                {
+                  start: { lat: 35.6762, lng: 139.6503, label: "Tokyo" },
+                  end: { lat: -33.8688, lng: 151.2093, label: "Sydney" },
+                },
+                {
+                  start: { lat: 45.5017, lng: -73.5673, label: "Montréal" },
+                  end: { lat: 41.3851, lng: 2.1734, label: "Barcelone" },
+                },
+              ]}
+            />
+          </div>
         </section>
 
         {/* Vision Section */}
@@ -60,30 +71,7 @@ export default function About() {
         </section>
 
         {/* Team Section */}
-        <section>
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">L'équipe derrière ANKORA</h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Des passionnés d'éducation et de voyage, unis pour changer la donne.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {team.map((member) => (
-              <Card key={member.name} className="text-center hover:-translate-y-1 transition-transform duration-300">
-                <div className="w-32 h-32 mx-auto mb-6 rounded-full overflow-hidden ring-4 ring-blue-50">
-                  <img
-                    src={member.image}
-                    alt={member.name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <h3 className="text-xl font-bold text-gray-900">{member.name}</h3>
-                <p className="text-blue-600 font-medium mt-1">{member.role}</p>
-              </Card>
-            ))}
-          </div>
-        </section>
+        <TeamSection />
 
       </main>
       <Footer />

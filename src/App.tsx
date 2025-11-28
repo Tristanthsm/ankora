@@ -8,6 +8,7 @@ import Dashboard from './pages/Dashboard'
 import Account from './pages/Account'
 import About from './pages/About'
 import Marketplace from './pages/Marketplace'
+import MentorPublicProfile from './pages/MentorPublicProfile'
 import HowItWorks from './pages/HowItWorks'
 import BecomeMentor from './pages/BecomeMentor'
 import FAQ from './pages/FAQ'
@@ -42,6 +43,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/about" element={<About />} />
             <Route path="/marketplace" element={<Marketplace />} />
+            <Route path="/marketplace/mentor/:id" element={<MentorPublicProfile />} />
             <Route path="/how-it-works" element={<HowItWorks />} />
             <Route path="/become-mentor" element={<BecomeMentor />} />
             <Route path="/faq" element={<FAQ />} />

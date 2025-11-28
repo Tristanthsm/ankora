@@ -3,7 +3,7 @@ import { Ankora } from "./BackgroundPaths"
 import FeaturesSection from "./FeaturesSection"
 import { TestimonialsSection } from "./TestimonialsSection"
 import Footer from "./Footer"
-import TeamSection from "./TeamSection"
+import CityAccordion from "./CityAccordion"
 
 export default function HomePage() {
     return (
@@ -11,10 +11,9 @@ export default function HomePage() {
             <Header />
             <main>
                 <Ankora />
-                <FeaturesSection />
                 <CityAccordion />
+                <FeaturesSection />
                 <TestimonialsSection />
-                <TeamSection />
                 {/* Call to Action Section */}
                 <section className="py-20 bg-blue-600 relative overflow-hidden">
                     <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>

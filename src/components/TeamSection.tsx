@@ -1,36 +1,46 @@
 import { motion } from 'framer-motion'
-import { Linkedin, Twitter, Mail } from 'lucide-react'
+import { Linkedin, Mail } from 'lucide-react'
 
 const team = [
     {
-        name: "Tristan Thomas",
-        role: "Co-Founder & CEO",
+        name: "Lucas Velay",
+        role: "Chef de projet (CEO)",
         image: "/images/team/member1.png",
-        bio: "Visionnaire passionné par l'éducation et la technologie."
+        bio: "",
+        linkedin: "https://www.linkedin.com/in/lucas-velay-034a2a32b/",
+        email: "lucas.velay@edu.em-lyon.com"
     },
     {
-        name: "Sarah Chen",
-        role: "Head of Product",
+        name: "Baptiste DE OLIVEIRA MENDES",
+        role: "Responsable Communication & Marketing",
         image: "/images/team/member2.png",
-        bio: "Experte en design produit et expérience utilisateur."
+        bio: "",
+        linkedin: "https://www.linkedin.com/in/baptiste-de-oliveira-mendes-a892a133b/",
+        email: "baptiste.deoliveiramendes@edu.em-lyon.com"
     },
     {
-        name: "Marc Dubois",
-        role: "CTO",
+        name: "Tristan THOMAS",
+        role: "Responsable technique (CTO)",
         image: "/images/team/member3.png",
-        bio: "Architecte technique avec 10 ans d'expérience en SaaS."
+        bio: "",
+        linkedin: "https://www.linkedin.com/in/tristan-thomas-b52629317/",
+        email: "tristan.thomas@edu.em-lyon.com"
     },
     {
-        name: "Emma Wilson",
-        role: "Head of Growth",
+        name: "Hanaé MOLET",
+        role: "Responsable Produit",
         image: "/images/team/member4.png",
-        bio: "Spécialiste du marketing digital et de l'acquisition."
+        bio: "",
+        linkedin: "https://www.linkedin.com/in/molet-hana%C3%A9-544b1633b/",
+        email: "hanae.molet@edu.em-lyon.com"
     },
     {
-        name: "Lucas Moretti",
-        role: "Community Lead",
+        name: "Corentin CHARRA",
+        role: "Responsable Qualité & Relation",
         image: "/images/team/member5.png",
-        bio: "Animateur de communautés et expert en engagement."
+        bio: "",
+        linkedin: "https://www.linkedin.com/in/corentin-charra-b3a48728a/",
+        email: "corentin.charra@edu.em-lyon.com"
     }
 ]
 
@@ -69,13 +79,10 @@ export default function TeamSection() {
                             {/* <p className="text-sm text-gray-500 mb-4 line-clamp-2">{member.bio}</p> */}
 
                             <div className="flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-y-2 group-hover:translate-y-0">
-                                <a href="#" className="text-gray-400 hover:text-blue-600 transition-colors">
+                                <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-blue-600 transition-colors">
                                     <Linkedin className="w-4 h-4" />
                                 </a>
-                                <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
-                                    <Twitter className="w-4 h-4" />
-                                </a>
-                                <a href="#" className="text-gray-400 hover:text-gray-900 transition-colors">
+                                <a href={`mailto:${member.email}`} className="text-gray-400 hover:text-gray-900 transition-colors">
                                     <Mail className="w-4 h-4" />
                                 </a>
                             </div>

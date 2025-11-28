@@ -68,7 +68,7 @@ export function Ankora({
           transition={{ duration: 2 }}
           className="max-w-4xl mx-auto"
         >
-          <h1 className="text-5xl sm:text-7xl md:text-8xl font-bold mb-8 tracking-tighter">
+          <h1 className="text-7xl sm:text-8xl md:text-9xl font-bold mb-8 tracking-tighter">
             {words.map((word, wordIndex) => (
               <span
                 key={wordIndex}
@@ -97,7 +97,7 @@ export function Ankora({
             ))}
           </h1>
 
-          <p className="text-lg sm:text-xl text-neutral-700 mb-8">
+          <p className="text-lg sm:text-xl text-blue-600 mb-8 font-medium">
             La seule plateforme qui aide vraiment les étudiants à trouver leur stage et les professionnels à monétiser leur réseau.
           </p>
 
