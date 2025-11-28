@@ -3,6 +3,7 @@ import { Navigate } from 'react-router-dom'
 import { useAuth } from '../lib/auth'
 import { Clock, AlertCircle } from 'lucide-react'
 import Button from './Button'
+import FullPageLoader from './FullPageLoader'
 
 interface VerifiedRouteProps {
     children: ReactNode
@@ -12,7 +13,7 @@ export default function VerifiedRoute({ children }: VerifiedRouteProps) {
     const { profile, loading } = useAuth()
 
     if (loading) {
-        return <div className="min-h-screen flex items-center justify-center">Chargement...</div>
+        return <FullPageLoader label="Connexion sécurisée en cours..." />
     }
 
     if (!profile) {
