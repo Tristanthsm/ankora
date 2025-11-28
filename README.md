@@ -240,6 +240,22 @@ npm install
 npm run build
 ```
 
+### Erreur `npm error 403 Forbidden - GET https://registry.npmjs.org/@radix-ui/react-slot`
+
+**Problème** : `npm install` échoue à cause d'un blocage d'accès au registre npm pour certains packages (ex. `@radix-ui/react-slot`).
+
+**Solution recommandée** :
+1. Vérifiez votre configuration npm (proxies ou registries personnalisés) :
+   ```bash
+   npm config get registry
+   npm config list
+   ```
+2. Forcez l'utilisation du registre public si besoin :
+   ```bash
+   npm install --registry=https://registry.npmjs.org
+   ```
+3. Si le réseau d'entreprise bloque certains packages, demandez l'autorisation ou ajoutez le registre à la liste blanche, puis relancez `npm install`.
+
 ## 📝 Développement
 
 ### Ajouter une nouvelle fonctionnalité
