@@ -1,11 +1,8 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { motion } from "framer-motion"
 import { Link, useLocation } from "react-router-dom"
-import { Home, Info } from "lucide-react"
+import { Home, Info, Search } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { useAuth } from '../../lib/auth'
-
-import { Search } from "lucide-react"
 
 const items = [
   { name: 'Accueil', url: '/', icon: Home },
@@ -14,36 +11,47 @@ const items = [
 ]
 
 export default function PublicTabBar() {
-  const { user } = useAuth()
   const location = useLocation()
   const [activeTab, setActiveTab] = useState(location.pathname)
-  const hiddenRoutes = ['/login', '/register']
+  const scrollPosition = useRef(0)
+
+  const hiddenRoutes = [
+    '/login',
+    '/register',
+    '/onboarding',
+    '/dashboard',
+    '/account',
+    '/student',
+    '/mentor',
+    '/messages',
+  ]
 
   useEffect(() => {
     setActiveTab(location.pathname)
+    setIsVisible(true)
   }, [location])
 
   const [isVisible, setIsVisible] = useState(true)
-  const [lastScrollY, setLastScrollY] = useState(0)
 
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY
+      const lastY = scrollPosition.current
 
-      if (currentScrollY < 10 || currentScrollY < lastScrollY) {
+      if (currentScrollY < 10 || currentScrollY < lastY) {
         setIsVisible(true)
       } else {
         setIsVisible(false)
       }
 
-      setLastScrollY(currentScrollY)
+      scrollPosition.current = currentScrollY
     }
 
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [lastScrollY])
+  }, [])
 
-  if (user || hiddenRoutes.some((route) => location.pathname.startsWith(route))) return null
+  if (hiddenRoutes.some((route) => location.pathname.startsWith(route))) return null
 
   return (
     <div className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-50 sm:top-6 sm:bottom-auto transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-[200%] sm:-translate-y-[200%]'}`}>

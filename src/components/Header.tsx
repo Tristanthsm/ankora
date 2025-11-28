@@ -1,33 +1,30 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { User } from 'lucide-react'
 import Button from './Button'
 
 export default function Header() {
-  const [isScrolled, setIsScrolled] = useState(false)
-
   const [isVisible, setIsVisible] = useState(true)
-  const [lastScrollY, setLastScrollY] = useState(0)
+  const lastScrollY = useRef(0)
 
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY
 
       // Show header if at top or scrolling up
-      if (currentScrollY < 10 || currentScrollY < lastScrollY) {
+      if (currentScrollY < 10 || currentScrollY < lastScrollY.current) {
         setIsVisible(true)
       } else {
         // Hide header if scrolling down and not at top
         setIsVisible(false)
       }
 
-      setIsScrolled(currentScrollY > 10)
-      setLastScrollY(currentScrollY)
+      lastScrollY.current = currentScrollY
     }
 
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [lastScrollY])
+  }, [])
 
   return (
     <header
