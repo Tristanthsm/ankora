@@ -108,17 +108,17 @@ export function TestimonialsSection() {
         <div className="container-custom grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 h-full items-start">
           <TestimonialsColumn
             testimonials={[testimonials[0], testimonials[1], testimonials[4]]}
-            duration={15}
+            duration={10}
           />
           <TestimonialsColumn
             testimonials={[testimonials[2], testimonials[3], testimonials[5]]}
             className="hidden md:block"
-            duration={19}
+            duration={14}
           />
           <TestimonialsColumn
             testimonials={[testimonials[4], testimonials[1], testimonials[0]]}
             className="hidden lg:block"
-            duration={17}
+            duration={12}
           />
         </div>
       </div>

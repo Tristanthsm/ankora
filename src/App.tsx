@@ -29,6 +29,8 @@ import ProtectedRoute from './components/ProtectedRoute'
 import VerifiedRoute from './components/VerifiedRoute'
 import PublicTabBar from './components/layout/PublicTabBar'
 
+import ScrollToTop from './components/ScrollToTop'
+
 /**
  * Composant racine de l'application
  * Gère le routage principal et la protection des routes
@@ -37,6 +39,7 @@ function App() {
   return (
     <AuthProvider>
       <Router>
+        <ScrollToTop />
         <div className="min-h-screen pb-20">
           <Routes>
             {/* Route publique */}

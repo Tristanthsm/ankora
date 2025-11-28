@@ -21,7 +21,21 @@ export default function About() {
             description="Chez ANKORA, nous croyons que le talent est universel, mais que les opportunités ne le sont pas. Notre mission est de briser les barrières géographiques en connectant les étudiants ambitieux avec des mentors qui ont déjà réussi leur expatriation."
             align="center"
           />
-          <div className="mt-12">
+        </section>
+
+        {/* Vision Section */}
+        <section className="grid md:grid-cols-2 gap-12 items-center">
+          <div className="space-y-6">
+            <Badge color="primary">Vision</Badge>
+            <h2 className="text-3xl font-bold text-gray-900">Un monde sans frontières pour l'ambition</h2>
+            <p className="text-gray-600 leading-relaxed text-lg">
+              Nous imaginons un futur où chaque étudiant, peu importe son origine, peut accéder aux meilleures opportunités mondiales grâce à un réseau de soutien solide.
+            </p>
+            <p className="text-gray-600 leading-relaxed text-lg">
+              L'expatriation est un accélérateur de carrière et de développement personnel. Nous la rendons accessible, sécurisée et humaine.
+            </p>
+          </div>
+          <div className="relative h-[400px] rounded-2xl overflow-hidden shadow-xl border border-gray-100 bg-white">
             <WorldMap
               dots={[
                 {
@@ -45,27 +59,6 @@ export default function About() {
                   end: { lat: 41.3851, lng: 2.1734, label: "Barcelone" },
                 },
               ]}
-            />
-          </div>
-        </section>
-
-        {/* Vision Section */}
-        <section className="grid md:grid-cols-2 gap-12 items-center">
-          <div className="space-y-6">
-            <Badge color="primary">Vision</Badge>
-            <h2 className="text-3xl font-bold text-gray-900">Un monde sans frontières pour l'ambition</h2>
-            <p className="text-gray-600 leading-relaxed text-lg">
-              Nous imaginons un futur où chaque étudiant, peu importe son origine, peut accéder aux meilleures opportunités mondiales grâce à un réseau de soutien solide.
-            </p>
-            <p className="text-gray-600 leading-relaxed text-lg">
-              L'expatriation est un accélérateur de carrière et de développement personnel. Nous la rendons accessible, sécurisée et humaine.
-            </p>
-          </div>
-          <div className="relative h-[400px] rounded-2xl overflow-hidden shadow-xl border border-gray-100">
-            <img
-              src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-              alt="Étudiants travaillant ensemble"
-              className="absolute inset-0 w-full h-full object-cover hover:scale-105 transition-transform duration-700"
             />
           </div>
         </section>

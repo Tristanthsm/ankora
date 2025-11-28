@@ -67,11 +67,12 @@ export default function TeamSection() {
                             transition={{ duration: 0.5, delay: index * 0.1 }}
                             className="flex flex-col items-center text-center group"
                         >
-                            <div className="relative w-32 h-32 mb-6 rounded-full overflow-hidden ring-4 ring-gray-50 group-hover:ring-blue-100 transition-all duration-300">
+                            <div className="relative w-32 h-32 mb-6 rounded-full overflow-hidden ring-4 ring-gray-50 group-hover:ring-blue-100 transition-all duration-300 bg-white">
                                 <img
                                     src={member.image}
                                     alt={member.name}
-                                    className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
+                                    className={`w-full h-full object-cover transform transition-transform duration-500 ${index === 0 || index === 2 || index === 4 ? 'scale-125' : 'scale-110'
+                                        } group-hover:scale-135`}
                                 />
                             </div>
                             <h3 className="text-lg font-bold text-gray-900 mb-1">{member.name}</h3>
