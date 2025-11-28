@@ -1,8 +1,9 @@
 ```typescript
 import { useState, useEffect } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../lib/auth'
 import { AuthForm } from '../components/auth/AuthForm'
+import { Home } from 'lucide-react'
 
 export default function Login() {
   const [error, setError] = useState('')
@@ -40,6 +41,13 @@ export default function Login() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
       <div className="w-full max-w-md space-y-4">
+        <Link
+          to="/"
+          className="inline-flex items-center gap-2 text-sm text-blue-600 hover:text-blue-700"
+        >
+          <Home className="h-4 w-4" />
+          Retour à l'accueil
+        </Link>
         {success && (
           <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded text-sm mb-4">
             {success}
