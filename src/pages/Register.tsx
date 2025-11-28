@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../lib/auth'
 import { AuthForm } from '../components/auth/AuthForm'
+import { Home } from 'lucide-react'
 
 export default function Register() {
   const [error, setError] = useState('')
@@ -36,6 +37,13 @@ export default function Register() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
       <div className="w-full max-w-md">
+        <Link
+          to="/"
+          className="inline-flex items-center gap-2 text-sm text-blue-600 hover:text-blue-700"
+        >
+          <Home className="h-4 w-4" />
+          Retour à l'accueil
+        </Link>
         <AuthForm
           mode="register"
           onEmailSubmit={handleEmailSubmit}
