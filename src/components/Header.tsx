@@ -32,11 +32,10 @@ export default function Header() {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 transform ${isVisible ? 'translate-y-0' : '-translate-y-full'
-        } ${isScrolled ? 'bg-white/80 backdrop-blur-md border-b border-gray-100 py-4 shadow-sm' : 'bg-transparent py-6'
-        }`}
+        } bg-transparent py-6`}
     >
-      <div className="container-custom flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2 group">
+      <div className="container-custom flex items-center justify-between pointer-events-none">
+        <Link to="/" className="flex items-center gap-2 group pointer-events-auto">
           {/* Logo */}
           <img
             src="/ankora-logo.png"
@@ -45,24 +44,11 @@ export default function Header() {
           />
         </Link>
 
-        <nav className="hidden md:block">
-          <ul className="flex gap-8 text-neutral-600 font-medium">
-            <li>
-              <Link to="/about" className="hover:text-blue-600 transition-colors relative after:content-[''] after:absolute after:left-0 after:bottom-[-4px] after:w-0 after:h-0.5 after:bg-blue-600 after:transition-all hover:after:w-full">
-                À propos
-              </Link>
-            </li>
-            <li>
-              <Link to="/marketplace" className="hover:text-blue-600 transition-colors relative after:content-[''] after:absolute after:left-0 after:bottom-[-4px] after:w-0 after:h-0.5 after:bg-blue-600 after:transition-all hover:after:w-full">
-                Marketplace
-              </Link>
-            </li>
-          </ul>
-        </nav>
+        {/* Navigation removed to avoid duplication with PublicTabBar */}
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 pointer-events-auto">
           <Link to="/login">
-            <Button variant="ghost" size="icon" className="rounded-full text-neutral-600 hover:text-blue-600 hover:bg-blue-50">
+            <Button variant="ghost" size="icon" className="rounded-full text-neutral-600 hover:text-blue-600 hover:bg-blue-50 bg-white/80 backdrop-blur-md shadow-sm border border-gray-100">
               <User className="h-6 w-6" />
             </Button>
           </Link>

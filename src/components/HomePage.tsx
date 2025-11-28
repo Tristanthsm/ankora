@@ -1,5 +1,5 @@
 import Header from "./Header"
-import BackgroundPaths from "./BackgroundPaths"
+import { BackgroundPaths } from "./BackgroundPaths"
 import FeaturesSection from "./FeaturesSection"
 import { TestimonialsSection } from "./TestimonialsSection"
 import Footer from "./Footer"
