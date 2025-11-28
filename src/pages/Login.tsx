@@ -1,15 +1,10 @@
-import { useState, FormEvent, useEffect } from 'react'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+```typescript
+import { useState, useEffect } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../lib/auth'
-import Button from '../components/Button'
-import Input from '../components/Input'
-import { AuthLayout } from '../components/auth/AuthLayout'
-
-// ... Icons ...
+import { AuthForm } from '../components/auth/AuthForm'
 
 export default function Login() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -23,14 +18,13 @@ export default function Login() {
     }
   }, [searchParams])
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault()
+  const handleEmailSubmit = async (data: { email: string; password?: string }) => {
     setError('')
     setSuccess('')
     setIsLoading(true)
 
     try {
-      const { error } = await signIn(email, password)
+      const { error } = await signIn(data.email, data.password || '')
       if (error) {
         setError(error.message || 'Erreur de connexion')
       } else {
@@ -44,72 +38,22 @@ export default function Login() {
   }
 
   return (
-    <AuthLayout
-      title="Connexion"
-      subtitle="Connectez-vous à votre compte Ankora."
-    >
-      {/* ... Social Buttons ... */}
-      <div className="space-y-2">
-        <Button type="button" variant="outline" className="w-full justify-start" onClick={() => { }}>
-          <GoogleIcon className='size-4 me-2' />
-          Continuer avec Google
-        </Button>
-        <Button type="button" variant="outline" className="w-full justify-start" onClick={() => { }}>
-          <AppleIcon className='size-4 me-2' />
-          Continuer avec Apple
-        </Button>
-      </div>
-
-      <AuthSeparator />
-
-      <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+      <div className="w-full max-w-md space-y-4">
         {success && (
-          <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded text-sm">
+          <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded text-sm mb-4">
             {success}
           </div>
         )}
-        {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded text-sm">
-            {error}
-          </div>
-        )}
-
-        <div className="space-y-4">
-          <Input
-            label="Email"
-            type="email"
-            placeholder="votre.email@exemple.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            autoComplete="email"
-          />
-
-          <Input
-            label="Mot de passe"
-            type="password"
-            placeholder="••••••••"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            autoComplete="current-password"
-          />
-        </div>
-
-        <Button type="submit" className="w-full" isLoading={isLoading}>
-          Se connecter avec Email
-        </Button>
-      </form>
-
-      <p className="text-gray-500 mt-8 text-sm text-center">
-        Pas encore de compte ?{' '}
-        <Link
-          to="/register"
-          className="text-blue-600 hover:text-blue-700 font-medium underline underline-offset-4"
-        >
-          Créer un compte
-        </Link>
-      </p>
-    </AuthLayout>
+        <AuthForm 
+          mode="login"
+          onEmailSubmit={handleEmailSubmit}
+          isLoading={isLoading}
+          error={error}
+          onSocialSignIn={(provider) => console.log('Social sign in:', provider)}
+        />
+      </div>
+    </div>
   )
 }
+```

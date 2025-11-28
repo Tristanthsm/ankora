@@ -41,16 +41,7 @@ function App() {
             {/* Route publique */}
             <Route path="/" element={<HomePage />} />
             <Route path="/about" element={<About />} />
-            <Route
-              path="/marketplace"
-              element={
-                <ProtectedRoute>
-                  <VerifiedRoute>
-                    <Marketplace />
-                  </VerifiedRoute>
-                </ProtectedRoute>
-              }
-            />
+            <Route path="/marketplace" element={<Marketplace />} />
             <Route path="/how-it-works" element={<HowItWorks />} />
             <Route path="/become-mentor" element={<BecomeMentor />} />
             <Route path="/faq" element={<FAQ />} />
