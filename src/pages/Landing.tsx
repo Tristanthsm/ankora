@@ -6,7 +6,7 @@ import Card from '../components/Card'
 import SectionHeader from '../components/SectionHeader'
 import Avatar from '../components/Avatar'
 import Badge from '../components/Badge'
-import { BackgroundPaths } from '../components/BackgroundPaths'
+import BackgroundPaths from '../components/BackgroundPaths'
 import { mentors, testimonials, stats, processSteps } from '../data/mock'
 import { TestimonialsSection } from '../components/TestimonialsSection'
 
@@ -15,12 +15,7 @@ export default function Landing() {
     <div className="bg-white min-h-screen">
       <Navbar />
 
-      <BackgroundPaths
-        title="Trouvez votre mentor international"
-        subtitle="ANKORA connecte les étudiants motivés avec des mentors locaux vérifiés pour réussir chaque étape de leur parcours à l’étranger."
-        ctaLabel="Découvrir Ankora"
-        ctaHref="/register"
-      />
+      <BackgroundPaths title="ANKORA" />
 
       <main className="container-custom pt-16 pb-24 space-y-24">
         {/* Mentors */}
