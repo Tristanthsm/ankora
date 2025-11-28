@@ -97,6 +97,10 @@ export function Ankora({
             ))}
           </h1>
 
+          <p className="text-lg sm:text-xl text-neutral-700 mb-8">
+            La seule plateforme qui aide vraiment les étudiants à trouver leur stage et les professionnels à monétiser leur réseau.
+          </p>
+
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <div
               className="inline-block group relative bg-gradient-to-b from-black/10 to-white/10 p-px rounded-2xl backdrop-blur-lg
