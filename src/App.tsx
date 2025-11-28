@@ -6,6 +6,7 @@ import Register from './pages/Register'
 import Onboarding from './pages/Onboarding'
 import Dashboard from './pages/Dashboard'
 import About from './pages/About'
+import Marketplace from './pages/Marketplace'
 import HowItWorks from './pages/HowItWorks'
 import BecomeMentor from './pages/BecomeMentor'
 import FAQ from './pages/FAQ'
@@ -38,6 +39,7 @@ function App() {
             {/* Route publique */}
             <Route path="/" element={<HomePage />} />
             <Route path="/about" element={<About />} />
+            <Route path="/marketplace" element={<Marketplace />} />
             <Route path="/how-it-works" element={<HowItWorks />} />
             <Route path="/become-mentor" element={<BecomeMentor />} />
             <Route path="/faq" element={<FAQ />} />

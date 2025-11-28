@@ -9,12 +9,11 @@ export default function Footer() {
                     {/* Brand */}
                     <div className="col-span-1 md:col-span-1">
                         <Link to="/" className="flex items-center gap-2 mb-6 group">
-                            <div className="h-10 w-10 bg-gradient-to-br from-blue-600 to-teal-400 rounded-xl flex items-center justify-center text-white font-bold text-xl">
-                                A
-                            </div>
-                            <span className="font-bold text-xl tracking-tight">
-                                ANKORA
-                            </span>
+                            <img
+                                src="/ankora-logo.png"
+                                alt="ANKORA Global Connect"
+                                className="h-10 w-auto object-contain bg-white rounded px-2 py-1"
+                            />
                         </Link>
                         <p className="text-gray-400 leading-relaxed mb-6">
                             La plateforme de référence pour le mentorat international. Connectez-vous, apprenez et grandissez.
