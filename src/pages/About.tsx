@@ -29,10 +29,10 @@ export default function About() {
             <Badge color="primary">Vision</Badge>
             <h2 className="text-3xl font-bold text-gray-900">Un monde sans frontières pour l'ambition</h2>
             <p className="text-gray-600 leading-relaxed text-lg">
-              Nous imaginons un futur où chaque étudiant, peu importe son origine, peut accéder aux meilleures opportunités mondiales grâce à un réseau de soutien solide.
+              Nous imaginons un futur où chaque étudiant, même sans contacts, peut s’appuyer sur des professionnels prêts à partager et monétiser leur réseau pour ouvrir de vraies opportunités.﻿
             </p>
             <p className="text-gray-600 leading-relaxed text-lg">
-              L'expatriation est un accélérateur de carrière et de développement personnel. Nous la rendons accessible, sécurisée et humaine.
+              Avec ANKORA, le réseau n’est plus un avantage réservé à quelques‑uns, mais un levier partagé entre ceux qui cherchent un stage et ceux qui veulent valoriser leur expérience.﻿
             </p>
           </div>
           <div className="relative h-[400px] rounded-2xl overflow-hidden shadow-xl border border-gray-100 bg-white">
