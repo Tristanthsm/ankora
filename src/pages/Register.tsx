@@ -65,11 +65,13 @@ export default function Register() {
     setIsLoading(true)
 
     try {
-      const { error } = await signUp(email, password)
+      const { error, data } = await signUp(email, password)
       if (error) {
         setError(error.message || 'Erreur lors de l\'inscription')
       } else {
-        navigate('/onboarding')
+        // Si l'inscription réussit, on redirige vers la connexion
+        // On peut passer un état pour afficher un message de succès
+        navigate('/login?registered=true')
       }
     } catch (err) {
       setError('Une erreur inattendue s\'est produite')

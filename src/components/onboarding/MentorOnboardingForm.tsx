@@ -20,11 +20,13 @@ export default function MentorOnboardingForm() {
     const { user, refreshProfile } = useAuth()
     const navigate = useNavigate()
     const [loading, setLoading] = useState(false)
+    const [submitError, setSubmitError] = useState<string | null>(null)
     const { register, handleSubmit, formState: { errors } } = useForm<MentorFormData>()
 
     const onSubmit = async (data: MentorFormData) => {
         if (!user) return
         setLoading(true)
+        setSubmitError(null)
 
         try {
             // 1. Update profile role and status
@@ -64,9 +66,9 @@ export default function MentorOnboardingForm() {
 
             await refreshProfile()
             navigate('/dashboard')
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error submitting mentor onboarding:', error)
-            alert('Une erreur est survenue lors de la soumission du formulaire.')
+            setSubmitError(error.message || 'Une erreur est survenue lors de la soumission. Veuillez réessayer.')
         } finally {
             setLoading(false)
         }
@@ -74,6 +76,13 @@ export default function MentorOnboardingForm() {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+            {submitError && (
+                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded relative" role="alert">
+                    <strong className="font-bold">Erreur : </strong>
+                    <span className="block sm:inline">{submitError}</span>
+                </div>
+            )}
+
             {/* Section 1: Informations Professionnelles */}
             <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-gray-900 border-b pb-2">Informations Professionnelles</h3>
