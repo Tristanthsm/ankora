@@ -151,47 +151,6 @@ export default function Marketplace() {
                             </div>
                         </div>
 
-                        <div className="relative">
-                            <div className="absolute -inset-6 rounded-[28px] bg-gradient-to-br from-blue-50 via-white to-indigo-50 blur-3xl" />
-                            <div className="relative space-y-4 rounded-2xl border border-gray-100 bg-white/90 p-6 shadow-lg backdrop-blur-sm">
-                                <div className="flex items-start justify-between">
-                                    <div>
-                                        <p className="text-xs uppercase tracking-[0.2em] text-gray-400">Filtre express</p>
-                                        <p className="text-sm text-gray-600">Lancez une recherche ciblée en quelques clics.</p>
-                                    </div>
-                                    <span className="text-[11px] text-gray-400">Front-only</span>
-                                </div>
-
-                                <div className="relative">
-                                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
-                                    <input
-                                        type="text"
-                                        placeholder="Rechercher par nom, rôle, ville..."
-                                        className="w-full rounded-xl border border-gray-200 bg-white/80 pl-10 pr-4 py-2.5 text-gray-900 placeholder:text-gray-400 shadow-inner focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100"
-                                        value={searchTerm}
-                                        onChange={(e) => setSearchTerm(e.target.value)}
-                                    />
-                                </div>
-
-                                <div className="flex flex-wrap gap-2">
-                                    {expertiseFilters.filter((filter) => filter !== 'Tous').map((filter) => (
-                                        <button
-                                            key={filter}
-                                            onClick={() => setSelectedExpertise(filter)}
-                                            className={`rounded-full border px-3 py-2 text-sm transition ${selectedExpertise === filter ? 'border-blue-600 bg-blue-600 text-white shadow-sm' : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300 hover:text-gray-900'}`}
-                                        >
-                                            {filter}
-                                        </button>
-                                    ))}
-                                    <button
-                                        onClick={() => setSelectedExpertise('Tous')}
-                                        className={`rounded-full border px-3 py-2 text-sm transition ${selectedExpertise === 'Tous' ? 'border-blue-600 bg-blue-50 text-blue-700 shadow-sm' : 'border-dashed border-gray-200 bg-white text-gray-700 hover:border-gray-300 hover:text-gray-900'}`}
-                                    >
-                                        Tout afficher
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </section>
                 <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 space-y-5">
