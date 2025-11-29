@@ -98,6 +98,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       email,
       password,
     })
+
+    if (!error) {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession()
+
+      setSession(session)
+      setUser(session?.user ?? null)
+
+      if (session?.user) {
+        await loadProfile(session.user.id)
+      }
+    }
+
     return { error }
   }
 
@@ -117,6 +131,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
    */
   const signOut = async () => {
     await supabase.auth.signOut()
+    setSession(null)
+    setUser(null)
     setProfile(null)
   }
 
