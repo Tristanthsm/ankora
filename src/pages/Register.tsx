@@ -21,7 +21,7 @@ export default function Register() {
     setIsLoading(true)
 
     try {
-      const { error, data: authData } = await signUp(data.email, data.password)
+      const { error } = await signUp(data.email, data.password)
       if (error) {
         setError(error.message || 'Erreur lors de l\'inscription')
       } else {

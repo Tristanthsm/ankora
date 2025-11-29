@@ -3,15 +3,13 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../lib/auth'
 import { User, Briefcase } from 'lucide-react'
 import Button from '../components/Button'
-import Card from '../components/Card'
 import StudentOnboardingForm from '../components/onboarding/StudentOnboardingForm'
 import MentorOnboardingForm from '../components/onboarding/MentorOnboardingForm'
 
 export default function Onboarding() {
-  const { user, profile, refreshProfile } = useAuth()
+  const { profile } = useAuth()
   const navigate = useNavigate()
   const [role, setRole] = useState<'student' | 'mentor' | null>(null)
-  const [loading, setLoading] = useState(false)
 
   // If profile is already verified, redirect to marketplace
   if (profile?.status === 'verified') {

@@ -30,7 +30,7 @@ export default function MentorOnboardingForm() {
         setSubmitError(null)
 
         try {
-            const roles = normalizeRoles(profile?.role || '')
+            const roles = normalizeRoles((profile?.role as any) || 'mentor')
             const nextRoles = Array.from(new Set([...roles, 'mentor']))
             const roleValue = nextRoles.length ? nextRoles.join(',') : 'mentor'
 
