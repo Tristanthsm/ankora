@@ -1,7 +1,6 @@
 import { Briefcase, Award, Target } from 'lucide-react'
 import { motion } from 'framer-motion'
-import { cn } from '@/lib/utils'
-import { GlowingEffect } from './ui/GlowingEffect'
+import { BentoGrid, BentoCard } from './ui/BentoGrid'
 
 const features = [
     {
@@ -9,21 +8,36 @@ const features = [
         title: "Réseau International",
         description: "Accédez à un réseau exclusif de mentors basés dans les plus grandes places financières et technologiques mondiales.",
         color: "text-blue-600",
-        bg: "bg-blue-50"
+        bg: "bg-blue-50",
+        href: "/marketplace",
+        cta: "Explorer le réseau",
+        background: (
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-100/50 via-blue-50/30 to-transparent" />
+        )
     },
     {
         icon: Award,
         title: "Mentors Vérifiés",
         description: "Qualité garantie. Chaque mentor est sélectionné pour son expertise et sa capacité à transmettre son savoir.",
         color: "text-indigo-600",
-        bg: "bg-indigo-50"
+        bg: "bg-indigo-50",
+        href: "/how-it-works",
+        cta: "En savoir plus",
+        background: (
+            <div className="absolute inset-0 bg-gradient-to-br from-indigo-100/50 via-indigo-50/30 to-transparent" />
+        )
     },
     {
         icon: Target,
         title: "Matching Intelligent",
         description: "Ne perdez plus de temps. Notre technologie vous connecte instantanément avec le profil le plus pertinent pour vous.",
         color: "text-purple-600",
-        bg: "bg-purple-50"
+        bg: "bg-purple-50",
+        href: "/become-mentor",
+        cta: "Découvrir",
+        background: (
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-100/50 via-purple-50/30 to-transparent" />
+        )
     }
 ]
 
@@ -47,40 +61,28 @@ export default function FeaturesSection() {
                     </motion.div>
                 </div>
 
-                <div className="grid md:grid-cols-3 gap-12">
+                <BentoGrid>
                     {features.map((feature, index) => (
-                        <div key={index} className="relative h-full rounded-2xl p-0.5">
-                            <GlowingEffect
-                                spread={40}
-                                glow={true}
-                                disabled={false}
-                                proximity={64}
-                                inactiveZone={0.01}
+                        <motion.div
+                            key={index}
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.5, delay: index * 0.1 }}
+                        >
+                            <BentoCard
+                                name={feature.title}
+                                Icon={feature.icon}
+                                description={feature.description}
+                                href={feature.href}
+                                cta={feature.cta}
+                                background={feature.background}
+                                color={feature.color}
+                                bg={feature.bg}
                             />
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.5, delay: index * 0.1 }}
-                                className="relative flex h-full flex-col items-center text-center group rounded-2xl bg-white p-8"
-                            >
-                                <div className={cn(
-                                    "w-20 h-20 rounded-3xl flex items-center justify-center mb-8 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3",
-                                    feature.bg,
-                                    feature.color
-                                )}>
-                                    <feature.icon className="w-10 h-10" />
-                                </div>
-                                <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                                    {feature.title}
-                                </h3>
-                                <p className="text-lg text-gray-600 leading-relaxed">
-                                    {feature.description}
-                                </p>
-                            </motion.div>
-                        </div>
+                        </motion.div>
                     ))}
-                </div>
+                </BentoGrid>
             </div>
         </section>
     )

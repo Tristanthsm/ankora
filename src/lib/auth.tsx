@@ -43,7 +43,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         .eq('user_id', userId)
         .single()
 
-      if (error) throw error
+      if (error) {
+        // Si le profil n'existe pas (code PGRST116), c'est normal pour un nouvel utilisateur
+        if (error.code === 'PGRST116') {
+          console.log('Profil non trouvé - utilisateur doit compléter l\'onboarding')
+          setProfile(null)
+          return
+        }
+        throw error
+      }
       setProfile(data)
     } catch (error) {
       console.error('Erreur lors du chargement du profil:', error)
@@ -64,31 +72,73 @@ export function AuthProvider({ children }: { children: ReactNode }) {
    * Initialise l'état d'authentification au chargement
    */
   useEffect(() => {
-    // Récupère la session actuelle
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
-      setSession(session)
-      setUser(session?.user ?? null)
-      if (session?.user) {
-        await loadProfile(session.user.id)
+    let mounted = true
+    let timeoutId: NodeJS.Timeout
+
+    // Timeout de sécurité : si la session ne charge pas en 5 secondes, on arrête le loading
+    timeoutId = setTimeout(() => {
+      if (mounted) {
+        console.warn('Timeout lors du chargement de la session - arrêt du loading')
+        setLoading(false)
       }
-      setLoading(false)
-    })
+    }, 5000)
+
+    // Récupère la session actuelle avec gestion d'erreur
+    supabase.auth.getSession()
+      .then(async ({ data: { session }, error }) => {
+        clearTimeout(timeoutId)
+        if (!mounted) return
+        
+        if (error) {
+          console.error('Erreur lors de la récupération de la session:', error)
+          setLoading(false)
+          return
+        }
+
+        setSession(session)
+        setUser(session?.user ?? null)
+        if (session?.user) {
+          try {
+            await loadProfile(session.user.id)
+          } catch (err) {
+            console.error('Erreur lors du chargement du profil:', err)
+          }
+        }
+        setLoading(false)
+      })
+      .catch((error) => {
+        clearTimeout(timeoutId)
+        console.error('Erreur lors de la récupération de la session:', error)
+        if (mounted) {
+          setLoading(false)
+        }
+      })
 
     // Écoute les changements d'authentification
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      if (!mounted) return
+      
       setSession(session)
       setUser(session?.user ?? null)
       if (session?.user) {
-        await loadProfile(session.user.id)
+        try {
+          await loadProfile(session.user.id)
+        } catch (err) {
+          console.error('Erreur lors du chargement du profil:', err)
+        }
       } else {
         setProfile(null)
       }
       setLoading(false)
     })
 
-    return () => subscription.unsubscribe()
+    return () => {
+      mounted = false
+      clearTimeout(timeoutId)
+      subscription.unsubscribe()
+    }
   }, [])
 
   /**

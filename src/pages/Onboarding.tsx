@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../lib/auth'
 import { User, Briefcase } from 'lucide-react'
@@ -7,14 +7,23 @@ import StudentOnboardingForm from '../components/onboarding/StudentOnboardingFor
 import MentorOnboardingForm from '../components/onboarding/MentorOnboardingForm'
 
 export default function Onboarding() {
-  const { profile } = useAuth()
+  const { profile, loading } = useAuth()
   const navigate = useNavigate()
   const [role, setRole] = useState<'student' | 'mentor' | null>(null)
 
   // If profile is already verified, redirect to marketplace
-  if (profile?.status === 'verified') {
-    navigate('/marketplace')
-    return null
+  useEffect(() => {
+    if (!loading && profile?.status === 'verified') {
+      navigate('/marketplace', { replace: true })
+    }
+  }, [profile, loading, navigate])
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+      </div>
+    )
   }
 
   const handleRoleSelect = async (selectedRole: 'student' | 'mentor') => {

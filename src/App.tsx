@@ -13,13 +13,11 @@ import HowItWorks from './pages/HowItWorks'
 import BecomeMentor from './pages/BecomeMentor'
 import FAQ from './pages/FAQ'
 import StudentLayout from './pages/student/Layout'
-import StudentDashboardPage from './pages/student/Dashboard'
 import StudentSearchPage from './pages/student/Search'
 import StudentRequestsPage from './pages/student/Requests'
 import StudentMessagesPage from './pages/student/Messages'
 import StudentProfilePage from './pages/student/Profile'
 import MentorLayout from './pages/mentor/Layout'
-import MentorDashboardPage from './pages/mentor/Dashboard'
 import MentorRequestsPage from './pages/mentor/Requests'
 import MentorStudentsPage from './pages/mentor/Students'
 import MentorMessagesPage from './pages/mentor/Messages'
@@ -30,6 +28,9 @@ import Settings from './pages/Settings'
 import ProtectedRoute from './components/ProtectedRoute'
 import VerifiedRoute from './components/VerifiedRoute'
 import PublicTabBar from './components/layout/PublicTabBar'
+import SpaceLayout from './pages/space/Layout'
+import SpaceDashboardPage from './pages/space/Dashboard'
+import DocumentsPage from './pages/space/Documents'
 
 import ScrollToTop from './components/ScrollToTop'
 
@@ -93,38 +94,52 @@ function App() {
               }
             />
 
-            {/* Espace étudiant */}
+            {/* Espace unifié - Accessible sans validation */}
+            <Route
+              path="/space"
+              element={
+                <ProtectedRoute>
+                  <SpaceLayout />
+                </ProtectedRoute>
+              }
+            >
+              <Route index element={<SpaceDashboardPage />} />
+              <Route path="search" element={<StudentSearchPage />} />
+              <Route path="requests" element={<StudentRequestsPage />} />
+              <Route path="mentor-requests" element={<MentorRequestsPage />} />
+              <Route path="students" element={<MentorStudentsPage />} />
+              <Route path="messages" element={<InboxPage />} />
+              <Route path="profile" element={<Account />} />
+              <Route path="documents" element={<DocumentsPage />} />
+            </Route>
+
+            {/* Espaces séparés (maintenus pour compatibilité) */}
             <Route
               path="/student"
               element={
                 <ProtectedRoute>
-                  <VerifiedRoute>
-                    <StudentLayout />
-                  </VerifiedRoute>
+                  <StudentLayout />
                 </ProtectedRoute>
               }
             >
-              <Route index element={<Navigate to="dashboard" replace />} />
-              <Route path="dashboard" element={<StudentDashboardPage />} />
+              <Route index element={<Navigate to="/space" replace />} />
+              <Route path="dashboard" element={<Navigate to="/space" replace />} />
               <Route path="search" element={<StudentSearchPage />} />
               <Route path="requests" element={<StudentRequestsPage />} />
               <Route path="messages" element={<StudentMessagesPage />} />
               <Route path="profile" element={<StudentProfilePage />} />
             </Route>
 
-            {/* Espace mentor */}
             <Route
               path="/mentor"
               element={
                 <ProtectedRoute>
-                  <VerifiedRoute>
-                    <MentorLayout />
-                  </VerifiedRoute>
+                  <MentorLayout />
                 </ProtectedRoute>
               }
             >
-              <Route index element={<Navigate to="dashboard" replace />} />
-              <Route path="dashboard" element={<MentorDashboardPage />} />
+              <Route index element={<Navigate to="/space" replace />} />
+              <Route path="dashboard" element={<Navigate to="/space" replace />} />
               <Route path="requests" element={<MentorRequestsPage />} />
               <Route path="students" element={<MentorStudentsPage />} />
               <Route path="messages" element={<MentorMessagesPage />} />
@@ -143,9 +158,7 @@ function App() {
               path="/messages"
               element={
                 <ProtectedRoute>
-                  <VerifiedRoute>
-                    <InboxPage />
-                  </VerifiedRoute>
+                  <InboxPage />
                 </ProtectedRoute>
               }
             />

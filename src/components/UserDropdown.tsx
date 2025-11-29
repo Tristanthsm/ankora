@@ -11,6 +11,7 @@ import {
   LogOut,
   Sparkles,
   BriefcaseBusiness,
+  LayoutDashboard,
 } from "lucide-react";
 
 export function UserDropdown() {
@@ -43,28 +44,16 @@ export function UserDropdown() {
   // Get initials or first letter of email
   const initials = user.email ? user.email.substring(0, 2).toUpperCase() : "U";
 
-  const studentLink = hasRole(profile, "student")
-    ? "/student/dashboard"
-    : "/onboarding?role=student";
-  const mentorLink = hasRole(profile, "mentor")
-    ? "/mentor/dashboard"
-    : "/onboarding?role=mentor";
+  const spaceLink = "/space";
   const profileLink = "/account";
 
   const tabs = [
     {
-      label: "Espace Stagiaire",
-      description: "Accédez à votre espace apprenant",
-      to: studentLink,
-      icon: <GraduationCap className="w-4 h-4" />,
-      highlight: hasRole(profile, "student"),
-    },
-    {
-      label: "Espace Mentor",
-      description: "Suivez vos mentorés et demandes",
-      to: mentorLink,
-      icon: <BriefcaseBusiness className="w-4 h-4" />,
-      highlight: hasRole(profile, "mentor"),
+      label: "Espace",
+      description: "Tableau de bord, documents et demandes",
+      to: spaceLink,
+      icon: <LayoutDashboard className="w-4 h-4" />,
+      highlight: true,
     },
     {
       label: "Messages",

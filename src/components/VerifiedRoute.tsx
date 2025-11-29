@@ -10,18 +10,26 @@ interface VerifiedRouteProps {
 }
 
 export default function VerifiedRoute({ children }: VerifiedRouteProps) {
-    const { profile, loading } = useAuth()
+    const { profile, loading, user } = useAuth()
 
     if (loading) {
         return <FullPageLoader label="Connexion sécurisée en cours..." />
     }
 
+    // Si pas d'utilisateur, laisser ProtectedRoute gérer la redirection
+    if (!user) {
+        return null
+    }
+
+    // Si pas de profil, rediriger vers l'onboarding
     if (!profile) {
         return <Navigate to="/onboarding" replace />
     }
 
+    // Si le profil est en attente de vérification, permettre l'accès mais afficher un message
+    // (on ne bloque plus l'accès, juste un avertissement)
     if (profile.status === 'pending_verification') {
-        return <Navigate to="/onboarding" replace />
+        // Permettre l'accès mais on pourrait afficher un banner
     }
 
     if (profile.status === 'under_review') {

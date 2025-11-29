@@ -34,25 +34,42 @@ export default function MentorOnboardingForm() {
             const nextRoles = Array.from(new Set([...roles, 'mentor']))
             const roleValue = nextRoles.length ? nextRoles.join(',') : 'mentor'
 
-            // 1. Update profile role and status
-            const { error: profileError } = await supabase
-                .from('profiles')
-                .update({
-                    role: roleValue,
-                    status: 'under_review'
-                })
-                .eq('user_id', user.id)
-
-            if (profileError) throw profileError
-
-            // 2. Get profile ID
-            const { data: profileData, error: profileFetchError } = await supabase
+            // 1. Vérifier si le profil existe, sinon le créer
+            let profileData
+            const { data: existingProfile } = await supabase
                 .from('profiles')
                 .select('id')
                 .eq('user_id', user.id)
                 .single()
 
-            if (profileFetchError) throw profileFetchError
+            if (existingProfile) {
+                // Mettre à jour le profil existant
+                const { error: profileError } = await supabase
+                    .from('profiles')
+                    .update({
+                        role: roleValue,
+                        status: 'under_review'
+                    })
+                    .eq('user_id', user.id)
+
+                if (profileError) throw profileError
+                profileData = existingProfile
+            } else {
+                // Créer un nouveau profil
+                const { data: newProfile, error: createError } = await supabase
+                    .from('profiles')
+                    .insert({
+                        user_id: user.id,
+                        role: roleValue,
+                        status: 'under_review',
+                        full_name: null,
+                    })
+                    .select('id')
+                    .single()
+
+                if (createError) throw createError
+                profileData = newProfile
+            }
 
             // 3. Insert mentor details
             const { error: detailsError } = await supabase
@@ -70,7 +87,7 @@ export default function MentorOnboardingForm() {
             if (detailsError) throw detailsError
 
             await refreshProfile()
-            navigate('/dashboard')
+            navigate('/space')
         } catch (error: any) {
             console.error('Error submitting mentor onboarding:', error)
             setSubmitError(error.message || 'Une erreur est survenue lors de la soumission. Veuillez réessayer.')

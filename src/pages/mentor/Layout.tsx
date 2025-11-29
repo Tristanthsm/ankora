@@ -1,8 +1,8 @@
-import { NavLink, Outlet, Navigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { NavLink, Outlet } from 'react-router-dom'
 import { LayoutGrid, Send, MessageSquare, User, GraduationCap } from 'lucide-react'
 import Navbar from '../../components/layout/Navbar'
 import { useAuth } from '../../lib/auth'
-import { hasRole } from '../../lib/roles'
 
 const links = [
   { to: '/mentor/dashboard', label: 'Vue d’ensemble', icon: LayoutGrid },
@@ -13,9 +13,33 @@ const links = [
 ]
 
 export default function MentorLayout() {
-  const { profile } = useAuth()
-  if (profile && !hasRole(profile, 'mentor')) {
-    return <Navigate to="/student/dashboard" replace />
+  const { loading } = useAuth()
+  
+  // Ne pas bloquer l'accès - permettre même sans profil ou avec un autre rôle
+  // L'utilisateur peut compléter le formulaire dans le dashboard
+  // Timeout de sécurité : si loading dure plus de 3 secondes, on affiche quand même
+  const [showContent, setShowContent] = useState(false)
+  
+  useEffect(() => {
+    if (!loading) {
+      setShowContent(true)
+      return
+    }
+    
+    // Timeout de sécurité après 3 secondes
+    const timeout = setTimeout(() => {
+      setShowContent(true)
+    }, 3000)
+    
+    return () => clearTimeout(timeout)
+  }, [loading])
+  
+  if (loading && !showContent) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+      </div>
+    )
   }
 
   return (
