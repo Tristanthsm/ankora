@@ -28,7 +28,7 @@ export default function Login() {
       if (error) {
         setError(error.message || 'Erreur de connexion')
       } else {
-        navigate('/dashboard')
+        navigate('/')
       }
     } catch (err) {
       setError('Une erreur inattendue s\'est produite')
