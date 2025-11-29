@@ -8,7 +8,7 @@ export default function Login() {
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const { signIn } = useAuth()
+  const { signIn, user, loading } = useAuth()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
 
@@ -17,6 +17,12 @@ export default function Login() {
       setSuccess('Compte créé avec succès ! Veuillez vérifier votre email pour confirmer votre compte avant de vous connecter.')
     }
   }, [searchParams])
+
+  useEffect(() => {
+    if (!loading && user) {
+      navigate('/', { replace: true })
+    }
+  }, [loading, navigate, user])
 
   const handleEmailSubmit = async (data: { email: string; password?: string }) => {
     setError('')
