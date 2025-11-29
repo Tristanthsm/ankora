@@ -44,12 +44,12 @@ const AuthForm = React.forwardRef<HTMLDivElement, AuthFormProps>(
             <div ref={ref} className={cn("w-full max-w-md mx-auto bg-white rounded-xl border border-gray-200 shadow-sm", className)} {...props}>
                 <div className="p-6 space-y-1">
                     <h2 className="text-2xl font-semibold tracking-tight">
-                        {isLogin ? "Sign in with email" : "Create an account"}
+                        {isLogin ? "Se connecter avec l'email" : "Créer un compte"}
                     </h2>
                     <p className="text-sm text-gray-500">
                         {isLogin
-                            ? "Make a new doc to bring your words, data, and teams together. For free."
-                            : "Enter your email below to create your account"}
+                            ? "Accédez à votre compte pour continuer votre aventure."
+                            : "Entrez votre adresse e-mail pour créer votre compte."}
                     </p>
                 </div>
 
@@ -57,7 +57,7 @@ const AuthForm = React.forwardRef<HTMLDivElement, AuthFormProps>(
                     {/* Social Sign-in */}
                     <div className="space-y-2">
                         <label className="text-xs font-medium text-gray-500 uppercase">
-                            {isLogin ? "Sign in with" : "Sign up with"}
+                            {isLogin ? "Se connecter avec" : "S'inscrire avec"}
                         </label>
                         <div className="grid grid-cols-4 gap-2">
                             <Button variant="outline" onClick={() => onSocialSignIn?.('google')} className="w-full p-0">
@@ -82,7 +82,7 @@ const AuthForm = React.forwardRef<HTMLDivElement, AuthFormProps>(
                             <span className="w-full border-t border-gray-200" />
                         </div>
                         <div className="relative flex justify-center text-xs uppercase">
-                            <span className="bg-white px-2 text-gray-500">or</span>
+                            <span className="bg-white px-2 text-gray-500">ou</span>
                         </div>
                     </div>
 
@@ -96,14 +96,14 @@ const AuthForm = React.forwardRef<HTMLDivElement, AuthFormProps>(
                     {/* Email Form */}
                     <form onSubmit={handleFormSubmit} className="space-y-4">
                         <div className="space-y-2">
-                            <label htmlFor="email" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Email</label>
+                            <label htmlFor="email" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Adresse e-mail</label>
                             <div className="relative">
                                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500 z-10" />
                                 <Input
                                     id="email"
                                     name="email"
                                     type="email"
-                                    placeholder="name@example.com"
+                                    placeholder="nom@exemple.com"
                                     className="pl-9"
                                     required
                                 />
@@ -111,10 +111,10 @@ const AuthForm = React.forwardRef<HTMLDivElement, AuthFormProps>(
                         </div>
                         <div className="space-y-2">
                             <div className="flex items-center justify-between">
-                                <label htmlFor="password" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Password</label>
+                                <label htmlFor="password" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Mot de passe</label>
                                 {isLogin && (
                                     <a href="#" className="text-sm font-medium text-blue-600 hover:underline">
-                                        Forgot password?
+                                        Mot de passe oublié ?
                                     </a>
                                 )}
                             </div>
@@ -137,7 +137,7 @@ const AuthForm = React.forwardRef<HTMLDivElement, AuthFormProps>(
                             </div>
                         </div>
                         <Button type="submit" className="w-full" isLoading={isLoading}>
-                            {isLogin ? "Sign In" : "Create Account"}
+                            {isLogin ? "Se connecter" : "Créer un compte"}
                         </Button>
                     </form>
                 </div>
@@ -145,32 +145,32 @@ const AuthForm = React.forwardRef<HTMLDivElement, AuthFormProps>(
                 <div className="p-6 pt-0 flex flex-col items-start space-y-4">
                     <Button variant="ghost" className="w-full text-gray-500 justify-start" onClick={() => onEmailLink?.()}>
                         <Sparkles className="mr-2 h-4 w-4" />
-                        Or email me a link
+                        Ou envoyez-moi un lien par e-mail
                     </Button>
                     <p className="text-xs text-gray-500 text-center w-full">
-                        By clicking continue, you agree to our{' '}
+                        En continuant, vous acceptez nos{' '}
                         <a href="#" className="underline hover:text-blue-600">
-                            Terms of Service
+                            Conditions d'utilisation
                         </a>{' '}
-                        and{' '}
+                        et notre{' '}
                         <a href="#" className="underline hover:text-blue-600">
-                            Privacy Policy
+                            Politique de confidentialité
                         </a>
                         .
                     </p>
                     <div className="text-center w-full text-sm">
                         {isLogin ? (
                             <>
-                                Don't have an account?{' '}
+                                Vous n'avez pas de compte ?{' '}
                                 <a href="/register" className="font-medium text-blue-600 hover:underline">
-                                    Sign up
+                                    Inscrivez-vous
                                 </a>
                             </>
                         ) : (
                             <>
-                                Already have an account?{' '}
+                                Vous avez déjà un compte ?{' '}
                                 <a href="/login" className="font-medium text-blue-600 hover:underline">
-                                    Sign in
+                                    Connectez-vous
                                 </a>
                             </>
                         )}
