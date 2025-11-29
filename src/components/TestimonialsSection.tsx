@@ -1,6 +1,5 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { cn } from "@/lib/utils";
 
 const testimonials = [
   {
@@ -88,15 +87,44 @@ const TestimonialsColumn = (props: {
   );
 };
 
-export function TestimonialsSection() {
+interface TestimonialsSectionProps {
+  className?: string;
+  title?: string;
+  description?: string;
+  testimonials?: Array<{
+    author: {
+      name: string;
+      role: string;
+      country?: string;
+    };
+    text: string;
+  }>;
+}
+
+export function TestimonialsSection({ 
+  className = '',
+  title = "Ils nous font confiance",
+  description = "Découvrez les retours de notre communauté grandissante d'étudiants et de mentors à travers le monde.",
+  testimonials: customTestimonials
+}: TestimonialsSectionProps = {}) {
+  // Utiliser les testimonials personnalisés ou les par défaut
+  const displayTestimonials = customTestimonials 
+    ? customTestimonials.map(t => ({
+        text: t.text,
+        image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+        name: t.author.name,
+        role: t.author.role,
+      }))
+    : testimonials;
+
   return (
-    <section className="py-20 bg-white overflow-hidden">
+    <section className={`py-20 bg-white overflow-hidden ${className}`}>
       <div className="container-custom mb-12 text-center">
         <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-          Ils nous font confiance
+          {title}
         </h2>
         <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-          Découvrez les retours de notre communauté grandissante d'étudiants et de mentors à travers le monde.
+          {description}
         </p>
       </div>
 
@@ -107,16 +135,16 @@ export function TestimonialsSection() {
 
         <div className="container-custom grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 h-full items-start">
           <TestimonialsColumn
-            testimonials={[testimonials[0], testimonials[1], testimonials[4]]}
+            testimonials={[displayTestimonials[0], displayTestimonials[1], displayTestimonials[4] || displayTestimonials[0]]}
             duration={10}
           />
           <TestimonialsColumn
-            testimonials={[testimonials[2], testimonials[3], testimonials[5]]}
+            testimonials={[displayTestimonials[2] || displayTestimonials[0], displayTestimonials[3] || displayTestimonials[1], displayTestimonials[5] || displayTestimonials[2] || displayTestimonials[0]]}
             className="hidden md:block"
             duration={14}
           />
           <TestimonialsColumn
-            testimonials={[testimonials[4], testimonials[1], testimonials[0]]}
+            testimonials={[displayTestimonials[4] || displayTestimonials[0], displayTestimonials[1], displayTestimonials[0]]}
             className="hidden lg:block"
             duration={12}
           />

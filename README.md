@@ -44,11 +44,16 @@ npm install
 
 #### b) Créer la base de données
 
+**Pour une nouvelle installation :**
 1. Dans votre dashboard Supabase, allez dans **SQL Editor**
 2. Créez une nouvelle requête
 3. Ouvrez le fichier `supabase-schema.sql` dans ce projet
 4. Copiez-collez tout le contenu dans l'éditeur SQL
 5. Exécutez la requête (bouton "Run")
+
+**Pour mettre à jour une base existante :**
+1. Si vous avez déjà une base de données existante, utilisez `supabase-migration-update.sql`
+2. Ce script ajoutera les nouvelles tables et colonnes sans supprimer les données existantes
 
 #### c) Configurer les variables d'environnement
 
@@ -154,13 +159,28 @@ ankora/
 1. **profiles** : Profils utilisateurs (étudiants et mentors)
    - Informations personnelles, localisation, compétences
    - Rôle (student/mentor)
+   - Statut de vérification (pending_verification, under_review, verified, rejected)
 
-2. **requests** : Demandes de contact
+2. **student_details** : Détails spécifiques aux étudiants
+   - École, niveau d'études, domaine d'études
+   - Pays et villes cibles, secteurs d'intérêt
+   - Type et durée de stage recherché
+   - Liens LinkedIn, CV, preuves d'étudiant
+   - Date de début souhaitée, objectifs
+
+3. **mentor_details** : Détails spécifiques aux mentors
+   - Poste actuel, entreprise, années d'expérience
+   - Secteurs d'expertise, réseau de pays
+   - Types d'aide proposés, formats de coaching
+   - Types de contact acceptés
+   - Documents de preuve, limite d'étudiants par mois
+
+4. **requests** : Demandes de contact
    - Lien étudiant ↔ mentor
    - Statut (pending/accepted/rejected)
    - Message optionnel
 
-3. **messages** : Messages de la messagerie
+5. **messages** : Messages de la messagerie
    - Liés à une requête acceptée
    - Contenu et timestamp
 
@@ -169,6 +189,7 @@ ankora/
 - **Row Level Security (RLS)** activé sur toutes les tables
 - Politiques de sécurité pour limiter l'accès aux données
 - Les utilisateurs ne peuvent voir/modifier que leurs propres données
+- Les détails étudiants/mentors sont privés et accessibles uniquement au propriétaire
 
 ## 🔧 Scripts Disponibles
 

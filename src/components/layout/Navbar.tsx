@@ -2,7 +2,7 @@ import { Link, NavLink } from 'react-router-dom'
 import { Globe2, LogIn } from 'lucide-react'
 import Button from '../Button'
 import { useAuth } from '../../lib/auth'
-import UserDropdown from '../UserDropdown'
+import { UserDropdown } from '../UserDropdown'
 
 const navLinks = [
   { to: '/about', label: 'À propos' },

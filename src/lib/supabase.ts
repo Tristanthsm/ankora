@@ -5,28 +5,33 @@ import { createClient } from '@supabase/supabase-js'
  * Les credentials sont chargés depuis les variables d'environnement
  * pour garantir la sécurité et la flexibilité de déploiement
  */
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || ''
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || ''
 
 if (!supabaseUrl || !supabaseAnonKey) {
   console.error(
     '⚠️ Variables d\'environnement Supabase manquantes. ' +
     'Vérifiez que VITE_SUPABASE_URL et VITE_SUPABASE_ANON_KEY sont définies dans votre fichier .env'
   )
-  console.error('VITE_SUPABASE_URL:', supabaseUrl)
+  console.error('VITE_SUPABASE_URL:', supabaseUrl || 'Non défini')
   console.error('VITE_SUPABASE_ANON_KEY:', supabaseAnonKey ? 'Défini' : 'Non défini')
 }
 
 /**
  * Client Supabase singleton
  * Utilisé pour toutes les interactions avec la base de données
+ * Utilise des valeurs par défaut vides si les variables ne sont pas définies
  */
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-  auth: {
-    persistSession: true,
-    autoRefreshToken: true,
-  },
-})
+export const supabase = createClient(
+  supabaseUrl || 'https://placeholder.supabase.co',
+  supabaseAnonKey || 'placeholder-key',
+  {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+    },
+  }
+)
 
 /**
  * Types de base de données
