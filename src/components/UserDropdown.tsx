@@ -3,10 +3,18 @@
 import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/lib/auth";
-import { LogOut, User, Settings, LayoutDashboard } from "lucide-react";
+import { hasRole } from "@/lib/roles";
+import {
+  GraduationCap,
+  MessageCircle,
+  User as UserIcon,
+  LogOut,
+  Sparkles,
+  BriefcaseBusiness,
+} from "lucide-react";
 
 export function UserDropdown() {
-  const { user, signOut } = useAuth();
+  const { user, profile, signOut } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
@@ -35,61 +43,123 @@ export function UserDropdown() {
   // Get initials or first letter of email
   const initials = user.email ? user.email.substring(0, 2).toUpperCase() : "U";
 
+  const studentLink = hasRole(profile, "student")
+    ? "/student/dashboard"
+    : "/onboarding?role=student";
+  const mentorLink = hasRole(profile, "mentor")
+    ? "/mentor/dashboard"
+    : "/onboarding?role=mentor";
+  const profileLink = hasRole(profile, "student")
+    ? "/student/profile"
+    : hasRole(profile, "mentor")
+      ? "/mentor/profile"
+      : "/account";
+
+  const tabs = [
+    {
+      label: "Espace Stagiaire",
+      description: "Accédez à votre espace apprenant",
+      to: studentLink,
+      icon: <GraduationCap className="w-4 h-4" />,
+      highlight: hasRole(profile, "student"),
+    },
+    {
+      label: "Espace Mentor",
+      description: "Suivez vos mentorés et demandes",
+      to: mentorLink,
+      icon: <BriefcaseBusiness className="w-4 h-4" />,
+      highlight: hasRole(profile, "mentor"),
+    },
+    {
+      label: "Messages",
+      description: "Toutes vos conversations",
+      to: "/messages",
+      icon: <MessageCircle className="w-4 h-4" />,
+      highlight: true,
+    },
+    {
+      label: "Mon profil",
+      description: "Vos informations et préférences",
+      to: profileLink,
+      icon: <UserIcon className="w-4 h-4" />,
+      highlight: true,
+    },
+  ];
+
   return (
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center justify-center w-10 h-10 rounded-full bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 text-white font-semibold shadow-lg shadow-blue-500/20 hover:shadow-xl hover:scale-[1.02] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
       >
         {initials}
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50 animate-in fade-in zoom-in-95 duration-200">
-          <div className="px-4 py-3 border-b border-gray-100">
-            <p className="text-sm font-medium text-gray-900 truncate">
-              {user.email}
-            </p>
+        <div className="absolute right-0 mt-2 w-72 bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-100/80 py-3 z-50 animate-in fade-in zoom-in-95 duration-200">
+          <div className="px-4 pb-3 border-b border-gray-100 flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 text-white flex items-center justify-center font-semibold">
+              {initials}
+            </div>
+            <div className="min-w-0">
+              <p className="text-sm font-semibold text-gray-900 truncate">{user.email}</p>
+              <div className="mt-1 flex flex-wrap gap-2">
+                {hasRole(profile, "student") && (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2 py-0.5 text-[11px] font-semibold text-blue-700">
+                    <GraduationCap className="w-3 h-3" /> Stagiaire
+                  </span>
+                )}
+                {hasRole(profile, "mentor") && (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-purple-50 px-2 py-0.5 text-[11px] font-semibold text-purple-700">
+                    <BriefcaseBusiness className="w-3 h-3" /> Mentor
+                  </span>
+                )}
+              </div>
+            </div>
+            <Sparkles className="w-4 h-4 text-indigo-500" />
           </div>
 
-          <div className="py-1">
-            <Link
-              to="/dashboard"
-              className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-              onClick={() => setIsOpen(false)}
-            >
-              <LayoutDashboard className="w-4 h-4" />
-              Tableau de bord
-            </Link>
-            <Link
-              to="/profile"
-              className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-              onClick={() => setIsOpen(false)}
-            >
-              <User className="w-4 h-4" />
-              Mon Profil
-            </Link>
-            <Link
-              to="/settings"
-              className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-              onClick={() => setIsOpen(false)}
-            >
-              <Settings className="w-4 h-4" />
-              Paramètres
-            </Link>
+          <div className="py-2">
+            {tabs.map((tab) => (
+              <Link
+                key={tab.label}
+                to={tab.to}
+                className="group flex items-start gap-3 px-4 py-3 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-blue-50 transition-all duration-150"
+                onClick={() => setIsOpen(false)}
+              >
+                <div
+                  className={`flex h-9 w-9 items-center justify-center rounded-full border text-indigo-700 ${
+                    tab.highlight
+                      ? "bg-indigo-50 border-indigo-100"
+                      : "bg-gray-50 border-gray-100 text-gray-500"
+                  } group-hover:bg-white group-hover:border-indigo-200 group-hover:text-indigo-700 shadow-inner`}
+                >
+                  {tab.icon}
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-sm font-semibold text-gray-900 group-hover:text-indigo-700">
+                    {tab.label}
+                  </span>
+                  <span className="text-xs text-gray-500 group-hover:text-indigo-600">{tab.description}</span>
+                </div>
+              </Link>
+            ))}
           </div>
 
-          <div className="border-t border-gray-100 mt-1 pt-1">
+          <div className="border-t border-gray-100 pt-2 mt-1 px-4">
             <button
               type="button"
               onClick={(e) => {
                 e.preventDefault();
                 handleSignOut();
               }}
-              className="flex w-full items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+              className="flex w-full items-center justify-between gap-2 rounded-xl bg-gradient-to-r from-red-50 to-orange-50 px-4 py-3 text-sm font-semibold text-red-600 hover:from-red-100 hover:to-orange-100 transition-all"
             >
-              <LogOut className="w-4 h-4" />
-              Se déconnecter
+              <div className="flex items-center gap-2">
+                <LogOut className="w-4 h-4" />
+                Se déconnecter
+              </div>
+              <span className="text-xs text-red-500">Quitter la session</span>
             </button>
           </div>
         </div>
