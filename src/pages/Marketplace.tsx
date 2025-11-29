@@ -16,7 +16,6 @@ import {
 } from 'lucide-react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import SectionHeader from '../components/SectionHeader'
 import Card from '../components/Card'
 import Button from '../components/Button'
 import Badge from '../components/Badge'
@@ -27,7 +26,6 @@ import {
     expertiseFilters,
     languageOptions,
     priceRanges,
-    type FilterOption,
     type PriceRange
 } from '../config/filters'
 
@@ -45,7 +43,6 @@ export default function Marketplace() {
     const [sortBy, setSortBy] = useState<'relevance' | 'rating' | 'price' | 'sessions'>('relevance')
     const [showAdvanced, setShowAdvanced] = useState<boolean>(false)
     const [showFilters, setShowFilters] = useState<boolean>(false)
-    const [selectedMentor, setSelectedMentor] = useState<Mentor | null>(null)
     const [favorites, setFavorites] = useState<number[]>([])
 
     // Ready for future Supabase connection: swap MOCK_MENTORS with a fetched list and reuse the filter states as query params.
@@ -109,50 +106,86 @@ export default function Marketplace() {
             <Header />
 
             <main className="container-custom pt-24 pb-20 space-y-12">
-                <div className="bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-500 text-white rounded-2xl p-10 shadow-lg relative overflow-hidden">
-                    <div className="absolute inset-0 bg-white/5 pointer-events-none" />
-                    <div className="relative flex flex-col md:flex-row md:items-center md:justify-between gap-10">
-                        <div className="space-y-4 max-w-2xl">
-                            <p className="text-blue-100 uppercase tracking-[0.2em] text-xs">Marketplace</p>
-                            <h1 className="text-3xl md:text-4xl font-bold leading-tight">Trouvez le mentor qui accélère votre prochain cap</h1>
-                            <p className="text-blue-50 text-lg">Réservez un mentor vérifié et obtenez des réponses concrètes en quelques heures, pour avancer dès cette semaine.</p>
-                            <div className="flex flex-wrap gap-3 items-center">
-                                <Badge color="primary" className="bg-white/10 border-white/30 text-white">Réponse moyenne &lt; 1h</Badge>
-                                <Badge color="secondary" className="bg-white/10 border-white/30 text-white">+1000 sessions bookées</Badge>
-                                <Badge color="secondary" className="bg-white/10 border-white/30 text-white flex items-center gap-1">
-                                    <ShieldCheck className="h-4 w-4" /> Profils vérifiés
-                                </Badge>
+                <section className="relative overflow-hidden rounded-3xl border border-gray-200 bg-white p-8 md:p-12 shadow-sm">
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(59,130,246,0.08),transparent_35%),radial-gradient(circle_at_85%_0%,rgba(99,102,241,0.08),transparent_30%)]" />
+                    <div className="absolute inset-x-0 -bottom-16 h-32 bg-gradient-to-t from-gray-50 to-transparent" />
+
+                    <div className="relative grid items-center gap-10 lg:grid-cols-[1.6fr,1fr]">
+                        <div className="space-y-6">
+                            <div className="flex items-center gap-3">
+                                <span className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white/80 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-gray-600 shadow-sm">
+                                    <Sparkles className="h-4 w-4 text-blue-600" /> Mentors disponibles
+                                </span>
+                                <span className="text-xs text-gray-500">Marketplace</span>
+                            </div>
+
+                            <div className="space-y-3">
+                                <h1 className="text-3xl font-semibold leading-tight text-gray-900 md:text-4xl">Explorez une sélection prête à être réservée</h1>
+                                <p className="text-lg text-gray-600 md:max-w-3xl">
+                                    Tous les mentors sont vérifiés avant d’apparaître ici. Affinez par expertise, langue ou disponibilité pour trouver le bon match.
+                                </p>
+                            </div>
+
+                            <div className="grid gap-3 sm:grid-cols-3">
+                                <div className="flex items-center gap-2 rounded-2xl border border-gray-200 bg-gray-50/60 px-4 py-3 text-sm font-medium text-gray-800">
+                                    <ShieldCheck className="h-4 w-4 text-blue-600" />
+                                    Profils vérifiés
+                                </div>
+                                <div className="flex items-center gap-2 rounded-2xl border border-gray-200 bg-gray-50/60 px-4 py-3 text-sm font-medium text-gray-800">
+                                    <Clock className="h-4 w-4 text-blue-600" />
+                                    Réponse moyenne {'< 1h'}
+                                </div>
+                                <div className="flex items-center gap-2 rounded-2xl border border-gray-200 bg-gray-50/60 px-4 py-3 text-sm font-medium text-gray-800">
+                                    <MessageCircle className="h-4 w-4 text-blue-600" />
+                                    Sessions sécurisées
+                                </div>
+                            </div>
+
+                            <div className="flex flex-wrap gap-3 text-sm text-gray-600">
+                                <div className="flex items-center gap-2 rounded-full border border-gray-200 bg-white/80 px-3 py-2 shadow-sm">
+                                    <Globe2 className="h-4 w-4 text-blue-600" /> Filtrez par langue, pays ou fuseau horaire
+                                </div>
+                                <div className="flex items-center gap-2 rounded-full border border-gray-200 bg-white/80 px-3 py-2 shadow-sm">
+                                    <SlidersHorizontal className="h-4 w-4 text-blue-600" /> Ajustez selon l’expertise et le tarif
+                                </div>
                             </div>
                         </div>
-                        <div className="bg-white/10 rounded-xl p-6 backdrop-blur-md border border-white/20 w-full md:w-96 shadow-md">
-                            <div className="flex items-center justify-between mb-3">
-                                <h3 className="font-semibold text-lg">Filtre express</h3>
-                                <span className="text-xs text-blue-100">Front-only (mock)</span>
-                            </div>
-                            <div className="space-y-3">
+
+                        <div className="relative">
+                            <div className="absolute -inset-6 rounded-[28px] bg-gradient-to-br from-blue-50 via-white to-indigo-50 blur-3xl" />
+                            <div className="relative space-y-4 rounded-2xl border border-gray-100 bg-white/90 p-6 shadow-lg backdrop-blur-sm">
+                                <div className="flex items-start justify-between">
+                                    <div>
+                                        <p className="text-xs uppercase tracking-[0.2em] text-gray-400">Filtre express</p>
+                                        <p className="text-sm text-gray-600">Lancez une recherche ciblée en quelques clics.</p>
+                                    </div>
+                                    <span className="text-[11px] text-gray-400">Front-only</span>
+                                </div>
+
                                 <div className="relative">
-                                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-blue-100 h-5 w-5" />
+                                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
                                     <input
                                         type="text"
                                         placeholder="Rechercher par nom, rôle, ville..."
-                                        className="w-full bg-white/10 border border-white/30 rounded-lg pl-10 pr-4 py-2 text-white placeholder:text-blue-100 focus:outline-none focus:ring-2 focus:ring-white/60"
+                                        className="w-full rounded-xl border border-gray-200 bg-white/80 pl-10 pr-4 py-2.5 text-gray-900 placeholder:text-gray-400 shadow-inner focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100"
                                         value={searchTerm}
                                         onChange={(e) => setSearchTerm(e.target.value)}
                                     />
                                 </div>
-                                <div className="flex gap-2 flex-wrap">
+
+                                <div className="flex flex-wrap gap-2">
                                     {expertiseFilters.filter((filter) => filter !== 'Tous').map((filter) => (
                                         <button
                                             key={filter}
                                             onClick={() => setSelectedExpertise(filter)}
-                                            className={`px-3 py-1.5 rounded-full text-sm border transition-colors ${selectedExpertise === filter ? 'bg-white text-blue-600 border-white' : 'border-white/30 text-white hover:bg-white/10'}`}
+                                            className={`rounded-full border px-3 py-2 text-sm transition ${selectedExpertise === filter ? 'border-blue-600 bg-blue-600 text-white shadow-sm' : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300 hover:text-gray-900'}`}
                                         >
                                             {filter}
                                         </button>
                                     ))}
                                     <button
                                         onClick={() => setSelectedExpertise('Tous')}
-                                        className={`px-3 py-1.5 rounded-full text-sm border transition-colors ${selectedExpertise === 'Tous' ? 'bg-white text-blue-600 border-white' : 'border-white/30 text-white hover:bg-white/10'}`}
+                                        className={`rounded-full border px-3 py-2 text-sm transition ${selectedExpertise === 'Tous' ? 'border-blue-600 bg-blue-50 text-blue-700 shadow-sm' : 'border-dashed border-gray-200 bg-white text-gray-700 hover:border-gray-300 hover:text-gray-900'}`}
                                     >
                                         Tout afficher
                                     </button>
@@ -160,24 +193,7 @@ export default function Marketplace() {
                             </div>
                         </div>
                     </div>
-                    <div className="relative mt-6 md:mt-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-sm text-blue-100">
-                        <div className="flex items-center gap-2">
-                            <ShieldCheck className="h-4 w-4" />
-                            Profils fictifs utilisés pour la démo – la version finale affichera de vrais mentors ANKORA.
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <Sparkles className="h-4 w-4" />
-                            Pensé pour les étudiants : accès rapide, mentorat ciblé, échanges sécurisés.
-                        </div>
-                    </div>
-                </div>
-
-                <SectionHeader
-                    eyebrow="Mentors disponibles"
-                    title="Explorez une sélection prête à être réservée"
-                    description="Tous les mentors sont vérifiés avant d’apparaître ici. Affinez par expertise, langue ou disponibilité pour trouver le bon match."
-                />
-
+                </section>
                 <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 space-y-5">
                     <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
                         <div>
