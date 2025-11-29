@@ -25,6 +25,10 @@ import MentorStudentsPage from './pages/mentor/Students'
 import MentorMessagesPage from './pages/mentor/Messages'
 import MentorProfilePage from './pages/mentor/Profile'
 import ConversationPage from './pages/messages/Conversation'
+import InboxPage from './pages/messages/Inbox'
+import StudentSpace from './pages/dashboard/StudentSpace'
+import MentorSpace from './pages/dashboard/MentorSpace'
+import Settings from './pages/Settings'
 import ProtectedRoute from './components/ProtectedRoute'
 import VerifiedRoute from './components/VerifiedRoute'
 import PublicTabBar from './components/layout/PublicTabBar'
@@ -75,10 +79,38 @@ function App() {
               }
             />
             <Route
+              path="/dashboard/student"
+              element={
+                <ProtectedRoute>
+                  <VerifiedRoute>
+                    <StudentSpace />
+                  </VerifiedRoute>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/dashboard/mentor"
+              element={
+                <ProtectedRoute>
+                  <VerifiedRoute>
+                    <MentorSpace />
+                  </VerifiedRoute>
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="/account"
               element={
                 <ProtectedRoute>
                   <Account />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/settings"
+              element={
+                <ProtectedRoute>
+                  <Settings />
                 </ProtectedRoute>
               }
             />
@@ -126,6 +158,16 @@ function App() {
               element={
                 <ProtectedRoute>
                   <ConversationPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/messages"
+              element={
+                <ProtectedRoute>
+                  <VerifiedRoute>
+                    <InboxPage />
+                  </VerifiedRoute>
                 </ProtectedRoute>
               }
             />

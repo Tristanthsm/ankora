@@ -2,6 +2,7 @@ import { NavLink, Outlet, Navigate } from 'react-router-dom'
 import { LayoutGrid, Send, MessageSquare, User, GraduationCap } from 'lucide-react'
 import Navbar from '../../components/layout/Navbar'
 import { useAuth } from '../../lib/auth'
+import { hasRole } from '../../lib/roles'
 
 const links = [
   { to: '/mentor/dashboard', label: 'Vue d’ensemble', icon: LayoutGrid },
@@ -13,7 +14,7 @@ const links = [
 
 export default function MentorLayout() {
   const { profile } = useAuth()
-  if (profile && profile.role !== 'mentor') {
+  if (profile && !hasRole(profile, 'mentor')) {
     return <Navigate to="/student/dashboard" replace />
   }
 

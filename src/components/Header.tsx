@@ -2,10 +2,13 @@ import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { User } from 'lucide-react'
 import Button from './Button'
+import { useAuth } from '../lib/auth'
+import UserDropdown from './UserDropdown'
 
 export default function Header() {
   const [isVisible, setIsVisible] = useState(true)
   const lastScrollY = useRef(0)
+  const { user } = useAuth()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -44,11 +47,19 @@ export default function Header() {
         {/* Navigation removed to avoid duplication with PublicTabBar */}
 
         <div className="flex items-center gap-4 pointer-events-auto">
-          <Link to="/login">
-            <Button variant="ghost" size="icon" className="rounded-full text-neutral-600 hover:text-blue-600 hover:bg-blue-50 bg-white/80 backdrop-blur-md shadow-sm border border-gray-100">
-              <User className="h-6 w-6" />
-            </Button>
-          </Link>
+          {user ? (
+            <UserDropdown />
+          ) : (
+            <Link to="/login">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="rounded-full text-neutral-600 hover:text-blue-600 hover:bg-blue-50 bg-white/80 backdrop-blur-md shadow-sm border border-gray-100"
+              >
+                <User className="h-6 w-6" />
+              </Button>
+            </Link>
+          )}
         </div>
       </div>
     </header>

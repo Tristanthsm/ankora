@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../lib/auth'
+import { hasRole } from '../lib/roles'
 import Button from '../components/Button'
 import StudentDashboard from '../components/dashboard/StudentDashboard'
 import MentorDashboard from '../components/dashboard/MentorDashboard'
@@ -47,7 +48,11 @@ export default function Dashboard() {
                 <User className="h-5 w-5" />
                 <span className="font-medium">{profile.full_name || user.email}</span>
                 <span className="text-sm text-gray-500">
-                  ({profile.role === 'student' ? 'Étudiant' : 'Mentor'})
+                  ({hasRole(profile, 'student') && hasRole(profile, 'mentor')
+                    ? 'Étudiant & Mentor'
+                    : hasRole(profile, 'student')
+                      ? 'Étudiant'
+                      : 'Mentor'})
                 </span>
               </div>
               <Button variant="outline" size="sm" onClick={handleSignOut}>
@@ -61,7 +66,7 @@ export default function Dashboard() {
 
       {/* Contenu du dashboard selon le rôle */}
       <main className="container-custom py-8">
-        {profile.role === 'student' ? (
+        {hasRole(profile, 'student') ? (
           <StudentDashboard profile={profile} />
         ) : (
           <MentorDashboard profile={profile} />

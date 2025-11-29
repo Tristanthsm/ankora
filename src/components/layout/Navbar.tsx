@@ -1,7 +1,8 @@
 import { Link, NavLink } from 'react-router-dom'
-import { Globe2, LogIn, LogOut, User } from 'lucide-react'
+import { Globe2, LogIn } from 'lucide-react'
 import Button from '../Button'
 import { useAuth } from '../../lib/auth'
+import UserDropdown from '../UserDropdown'
 
 const navLinks = [
   { to: '/about', label: 'À propos' },
@@ -11,7 +12,7 @@ const navLinks = [
 ]
 
 export default function Navbar() {
-  const { user, profile, signOut } = useAuth()
+  const { user } = useAuth()
 
   return (
     <header className="sticky top-0 z-40 bg-white/90 backdrop-blur shadow-sm">
@@ -37,18 +38,7 @@ export default function Navbar() {
 
         <div className="flex items-center space-x-3">
           {user ? (
-            <>
-              <Link to={profile?.role === 'mentor' ? '/mentor/dashboard' : '/student/dashboard'}>
-                <Button size="sm" variant="outline">
-                  <User className="h-4 w-4 mr-2" />
-                  Espace
-                </Button>
-              </Link>
-              <Button size="sm" variant="danger" onClick={signOut}>
-                <LogOut className="h-4 w-4 mr-2" />
-                Quitter
-              </Button>
-            </>
+            <UserDropdown />
           ) : (
             <>
               <Link to="/login">

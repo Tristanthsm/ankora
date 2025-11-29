@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../lib/auth'
 import { supabase } from '../../lib/supabase'
+import { normalizeRoles } from '../../lib/roles'
 import Button from '../Button'
 import Input from '../Input'
 
@@ -19,7 +20,7 @@ type StudentFormData = {
 }
 
 export default function StudentOnboardingForm() {
-    const { user, refreshProfile } = useAuth()
+    const { user, profile, refreshProfile } = useAuth()
     const navigate = useNavigate()
     const [loading, setLoading] = useState(false)
     const [submitError, setSubmitError] = useState<string | null>(null)
@@ -31,11 +32,15 @@ export default function StudentOnboardingForm() {
         setSubmitError(null)
 
         try {
+            const roles = normalizeRoles(profile?.role || '')
+            const nextRoles = Array.from(new Set([...roles, 'student']))
+            const roleValue = nextRoles.length ? nextRoles.join(',') : 'student'
+
             // 1. Update profile role and status
             const { error: profileError } = await supabase
                 .from('profiles')
                 .update({
-                    role: 'student',
+                    role: roleValue,
                     status: 'under_review'
                 })
                 .eq('user_id', user.id)
