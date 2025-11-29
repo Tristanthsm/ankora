@@ -131,10 +131,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
    * Déconnexion utilisateur
    */
   const signOut = async () => {
-    await supabase.auth.signOut()
-    setSession(null)
-    setUser(null)
-    setProfile(null)
+    try {
+      const { error } = await supabase.auth.signOut()
+      if (error) throw error
+    } catch (error) {
+      console.error('Erreur lors de la déconnexion:', error)
+    } finally {
+      // Toujours réinitialiser l'état local pour éviter de rester connecté côté client
+      setSession(null)
+      setUser(null)
+      setProfile(null)
+    }
   }
 
   const logout = async () => {
