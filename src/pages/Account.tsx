@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../lib/auth'
 import { hasRole } from '../lib/roles'
 import { supabase, StudentDetails, MentorDetails } from '../lib/supabase'
@@ -7,9 +8,9 @@ import Input from '../components/Input'
 import Card from '../components/Card'
 import Navbar from '../components/layout/Navbar'
 import SectionHeader from '../components/SectionHeader'
-import { 
-  Briefcase, 
-  AlertCircle, 
+import {
+  Briefcase,
+  AlertCircle,
   CheckCircle, 
   Clock, 
   GraduationCap, 
@@ -21,15 +22,17 @@ import {
   Camera,
   Edit,
   ExternalLink,
-  FileText
+  FileText,
+  LogOut
 } from 'lucide-react'
 
 export default function Account() {
-  const { user, profile, refreshProfile } = useAuth()
+  const { user, profile, refreshProfile, signOut } = useAuth()
   const [loading, setLoading] = useState(false)
   const [studentDetails, setStudentDetails] = useState<StudentDetails | null>(null)
   const [mentorDetails, setMentorDetails] = useState<MentorDetails | null>(null)
   const [isEditing, setIsEditing] = useState<string | null>(null)
+  const navigate = useNavigate()
 
   const fetchDetails = useCallback(async () => {
     if (!profile) return
@@ -100,6 +103,11 @@ export default function Account() {
   const hasStudentRole = profile && hasRole(profile, 'student')
   const hasMentorRole = profile && hasRole(profile, 'mentor')
 
+  const handleLogout = async () => {
+    await signOut()
+    navigate('/login')
+  }
+
   if (!user) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -114,12 +122,22 @@ export default function Account() {
     <div className="bg-gray-50 min-h-screen">
       <Navbar />
       <div className="container-custom py-8">
-        <SectionHeader
-          eyebrow="Mon profil"
-          title="Vos informations personnelles"
-          description="Gérez toutes vos informations : profil général, stagiaire et mentor."
-          align="left"
-        />
+        <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+          <SectionHeader
+            eyebrow="Mon profil"
+            title="Vos informations personnelles"
+            description="Gérez toutes vos informations : profil général, stagiaire et mentor."
+            align="left"
+          />
+          <Button
+            variant="outline"
+            className="self-start"
+            onClick={handleLogout}
+          >
+            <LogOut className="h-4 w-4 mr-2" />
+            Se déconnecter
+          </Button>
+        </div>
 
         <div className="space-y-6 mt-8">
           {/* Profil général */}
