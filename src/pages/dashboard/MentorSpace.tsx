@@ -45,6 +45,16 @@ export default function MentorSpace() {
       icon: <Clock className="h-5 w-5 text-amber-600" />,
       color: 'text-amber-700 bg-amber-50',
     },
+    pending_verification: {
+      label: 'En attente de vérification',
+      icon: <Clock className="h-5 w-5 text-gray-500" />,
+      color: 'text-gray-700 bg-gray-100',
+    },
+    rejected: {
+      label: 'Profil rejeté',
+      icon: <CheckCircle className="h-5 w-5 text-red-600" />,
+      color: 'text-red-700 bg-red-50',
+    },
   }[profile.status] || {
     label: 'En attente de vérification',
     icon: <Clock className="h-5 w-5 text-gray-500" />,

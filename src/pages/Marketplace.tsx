@@ -29,7 +29,7 @@ import {
     type PriceRange
 } from '../config/filters'
 
-import { MOCK_MENTORS, type Mentor } from '../data/mockMentors'
+import { MOCK_MENTORS } from '../data/mockMentors'
 
 export default function Marketplace() {
     const [searchTerm, setSearchTerm] = useState('')

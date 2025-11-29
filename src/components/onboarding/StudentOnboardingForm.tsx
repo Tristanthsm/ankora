@@ -32,7 +32,7 @@ export default function StudentOnboardingForm() {
         setSubmitError(null)
 
         try {
-            const roles = normalizeRoles(profile?.role || '')
+            const roles = normalizeRoles((profile?.role as any) || 'student')
             const nextRoles = Array.from(new Set([...roles, 'student']))
             const roleValue = nextRoles.length ? nextRoles.join(',') : 'student'
 

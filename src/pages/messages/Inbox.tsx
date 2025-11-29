@@ -11,9 +11,11 @@ import { MessageSquare, Send } from 'lucide-react'
 
 interface ConversationPreview {
   id: string
-  title: string
+  name: string
+  role: 'mentor' | 'student'
   lastMessage: string
   timestamp: string
+  unread: boolean
 }
 
 export default function InboxPage() {
@@ -25,21 +27,27 @@ export default function InboxPage() {
     () => [
       {
         id: '1',
-        title: 'Coaching carrière - Amine',
+        name: 'Amine · Mentor',
+        role: 'mentor',
         lastMessage: 'Merci pour les documents, on avance !',
         timestamp: 'Il y a 2h',
+        unread: false,
       },
       {
         id: '2',
-        title: 'Préparation entretien - Sofia',
+        name: 'Sofia · Étudiante',
+        role: 'student',
         lastMessage: 'Peux-tu revoir mon CV ?',
         timestamp: 'Hier',
+        unread: true,
       },
       {
         id: '3',
-        title: 'Nouveau matching - Lucas',
+        name: 'Lucas · Mentor',
+        role: 'mentor',
         lastMessage: 'Bienvenue dans la messagerie Ankora 🎉',
         timestamp: 'Il y a 3 jours',
+        unread: true,
       },
     ],
     []
@@ -57,7 +65,7 @@ export default function InboxPage() {
         <SectionHeader
           eyebrow="Messagerie"
           title="Messages"
-          description="Retrouvez vos conversations entre étudiants et mentors."
+          description="Liste de vos conversations et fil de discussion sélectionné."
           align="left"
         />
 
@@ -76,10 +84,26 @@ export default function InboxPage() {
                   }`}
                 >
                   <div className="flex items-center justify-between text-sm font-semibold">
-                    <span>{conversation.title}</span>
+                    <span className="truncate flex items-center gap-2">
+                      {conversation.name}
+                      <span
+                        className={`text-[11px] px-2 py-0.5 rounded-full ${
+                          conversation.role === 'mentor'
+                            ? 'bg-indigo-50 text-indigo-700'
+                            : 'bg-emerald-50 text-emerald-700'
+                        }`}
+                      >
+                        {conversation.role === 'mentor' ? 'Mentor' : 'Étudiant'}
+                      </span>
+                    </span>
                     <span className="text-xs text-gray-500">{conversation.timestamp}</span>
                   </div>
                   <p className="text-sm text-gray-600 mt-1 line-clamp-2">{conversation.lastMessage}</p>
+                  {conversation.unread && (
+                    <span className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-amber-700 bg-amber-50 px-2 py-1 rounded-full">
+                      • Non lu
+                    </span>
+                  )}
                 </button>
               ))}
             </div>
@@ -89,7 +113,7 @@ export default function InboxPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-gray-500">Conversation</p>
-                <h4 className="text-lg font-semibold text-gray-900">{active.title}</h4>
+                <h4 className="text-lg font-semibold text-gray-900">{active?.name || 'Conversation'}</h4>
               </div>
               <MessageSquare className="h-5 w-5 text-primary-600" />
             </div>

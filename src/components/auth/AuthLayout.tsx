@@ -1,5 +1,4 @@
 import React from 'react'
-import { ChevronLeft } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 interface AuthLayoutProps {

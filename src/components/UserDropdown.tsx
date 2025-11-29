@@ -21,7 +21,7 @@ export function UserDropdown() {
 
   const handleSignOut = async () => {
     await signOut();
-    navigate("/");
+    navigate("/login");
     setIsOpen(false);
   };
 
@@ -49,11 +49,7 @@ export function UserDropdown() {
   const mentorLink = hasRole(profile, "mentor")
     ? "/mentor/dashboard"
     : "/onboarding?role=mentor";
-  const profileLink = hasRole(profile, "student")
-    ? "/student/profile"
-    : hasRole(profile, "mentor")
-      ? "/mentor/profile"
-      : "/account";
+  const profileLink = "/account";
 
   const tabs = [
     {
