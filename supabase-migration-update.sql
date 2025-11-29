@@ -189,3 +189,4 @@ CREATE POLICY "Users can update their own mentor details"
 -- FIN DE LA MIGRATION
 -- ============================================
 
+

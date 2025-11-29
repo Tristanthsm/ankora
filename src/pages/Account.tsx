@@ -5,7 +5,7 @@ import { supabase, StudentDetails, MentorDetails } from '../lib/supabase'
 import Button from '../components/Button'
 import Input from '../components/Input'
 import Card from '../components/Card'
-import { Briefcase, AlertCircle, CheckCircle, Clock, GraduationCap, Globe2, Languages } from 'lucide-react'
+import { Briefcase, AlertCircle, CheckCircle, Clock, GraduationCap, Globe2, Languages, User } from 'lucide-react'
 
 export default function Account() {
   const { user, profile, refreshProfile } = useAuth()
@@ -103,7 +103,7 @@ export default function Account() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-6">
-            <InfoField label="Nom complet" value={profile.full_name || 'Non renseigné'} icon={<UserIcon />} />
+            <InfoField label="Nom complet" value={profile.full_name || 'Non renseigné'} icon={<User className="h-4 w-4 text-primary-600" />} />
             <InfoField label="Email" value={user?.email || 'Non renseigné'} icon={<Globe2 className="h-4 w-4 text-primary-600" />} />
             <InfoField label="Pays" value={profile.country || 'Non renseigné'} icon={<Globe2 className="h-4 w-4 text-primary-600" />} />
             <InfoField label="Ville" value={profile.city || 'Non renseignée'} icon={<Globe2 className="h-4 w-4 text-primary-600" />} />
@@ -194,6 +194,3 @@ function InfoField({ label, value, icon }: { label: string; value: string; icon?
   )
 }
 
-function UserIcon() {
-  return <div className="h-4 w-4 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center text-[10px] font-bold">ID</div>
-}
