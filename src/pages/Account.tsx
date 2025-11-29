@@ -1,33 +1,52 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useAuth } from '../lib/auth'
-import { supabase } from '../lib/supabase'
+import { hasRole } from '../lib/roles'
+import { supabase, StudentDetails, MentorDetails } from '../lib/supabase'
 import Button from '../components/Button'
 import Input from '../components/Input'
 import Card from '../components/Card'
-import { User, Briefcase, AlertCircle, CheckCircle, Clock } from 'lucide-react'
+import { Briefcase, AlertCircle, CheckCircle, Clock, GraduationCap } from 'lucide-react'
 
 export default function Account() {
     const { user, profile, refreshProfile } = useAuth()
     const [loading, setLoading] = useState(false)
-    const [details, setDetails] = useState<any>(null)
+    const [studentDetails, setStudentDetails] = useState<StudentDetails | null>(null)
+    const [mentorDetails, setMentorDetails] = useState<MentorDetails | null>(null)
+
+    const fetchDetails = useCallback(async () => {
+        if (!profile) return
+        setLoading(true)
+
+        try {
+            if (hasRole(profile, 'student')) {
+                const { data } = await supabase
+                    .from('student_details')
+                    .select('*')
+                    .eq('profile_id', profile.id)
+                    .single()
+
+                setStudentDetails(data)
+            }
+
+            if (hasRole(profile, 'mentor')) {
+                const { data } = await supabase
+                    .from('mentor_details')
+                    .select('*')
+                    .eq('profile_id', profile.id)
+                    .single()
+
+                setMentorDetails(data)
+            }
+        } finally {
+            setLoading(false)
+        }
+    }, [profile])
 
     useEffect(() => {
         if (user && profile) {
             fetchDetails()
         }
-    }, [user, profile])
-
-    const fetchDetails = async () => {
-        if (!profile) return
-        const table = profile.role === 'student' ? 'student_details' : 'mentor_details'
-        const { data, error } = await supabase
-            .from(table)
-            .select('*')
-            .eq('profile_id', profile.id)
-            .single()
-
-        if (data) setDetails(data)
-    }
+    }, [user, profile, fetchDetails])
 
     const getStatusBadge = (status: string) => {
         switch (status) {
@@ -42,121 +61,124 @@ export default function Account() {
         }
     }
 
+    const hasStudentRole = hasRole(profile, 'student')
+    const hasMentorRole = hasRole(profile, 'mentor')
+
     if (!profile) return null
 
     return (
         <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-3xl mx-auto space-y-6">
-                <h1 className="text-3xl font-bold text-gray-900">Mon Compte</h1>
-
-                {/* Status Card */}
-                <Card>
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <h2 className="text-lg font-semibold text-gray-900">Statut du profil</h2>
-                            <p className="text-gray-500 text-sm mt-1">
-                                {profile.role === 'student' ? 'Compte Étudiant' : 'Compte Mentor'}
-                            </p>
-                        </div>
-                        {getStatusBadge(profile.status)}
+            <div className="max-w-4xl mx-auto space-y-6">
+                <div className="flex items-center justify-between">
+                    <div>
+                        <h1 className="text-3xl font-bold text-gray-900">Mon Compte</h1>
+                        <p className="text-gray-600">Gérez vos informations principales et vos rôles Ankora.</p>
                     </div>
-                </Card>
+                    {getStatusBadge(profile.status)}
+                </div>
 
-                {/* Basic Info */}
                 <Card>
-                    <h2 className="text-lg font-semibold text-gray-900 mb-4">Informations de base</h2>
-                    <div className="grid md:grid-cols-2 gap-6">
+                    <div className="flex items-start justify-between gap-4">
+                        <div className="flex items-center gap-3">
+                            <div className="h-12 w-12 rounded-full bg-primary-100 text-primary-800 flex items-center justify-center font-semibold text-lg">
+                                {(profile.full_name || user?.email || '?').substring(0, 2).toUpperCase()}
+                            </div>
+                            <div>
+                                <h2 className="text-xl font-semibold text-gray-900">Informations principales</h2>
+                                <p className="text-sm text-gray-500">Vos données sont synchronisées avec Supabase.</p>
+                            </div>
+                        </div>
+                        <div className="flex gap-2">
+                            {hasStudentRole && <span className="px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 flex items-center gap-1"><GraduationCap className="h-3 w-3" /> Étudiant</span>}
+                            {hasMentorRole && <span className="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 flex items-center gap-1"><Briefcase className="h-3 w-3" /> Mentor</span>}
+                        </div>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-6 mt-6">
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Nom complet</label>
+                            <Input value={profile.full_name || ''} disabled className="bg-gray-50" />
+                        </div>
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
                             <Input value={user?.email} disabled className="bg-gray-50" />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Nom complet</label>
-                            <Input defaultValue={profile.full_name || ''} disabled className="bg-gray-50" />
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Pays</label>
+                            <Input value={profile.country || ''} disabled className="bg-gray-50" />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Ville</label>
+                            <Input value={profile.city || ''} disabled className="bg-gray-50" />
+                        </div>
+                        <div className="md:col-span-2">
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Langues</label>
+                            <div className="flex flex-wrap gap-2">
+                                {profile.languages?.length ? (
+                                    profile.languages.map((lang) => (
+                                        <span key={lang} className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs">
+                                            {lang}
+                                        </span>
+                                    ))
+                                ) : (
+                                    <span className="text-gray-500 text-sm">Langues non renseignées</span>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </Card>
 
-                {/* Role Details */}
-                {details && (
-                    <Card>
-                        <h2 className="text-lg font-semibold text-gray-900 mb-4">
-                            Détails {profile.role === 'student' ? 'Étudiant' : 'Mentor'}
-                        </h2>
-                        <div className="space-y-4">
-                            {profile.role === 'student' ? (
-                                <>
-                                    <div className="grid md:grid-cols-2 gap-4">
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700 mb-1">École</label>
-                                            <Input defaultValue={details.school} disabled className="bg-gray-50" />
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700 mb-1">Niveau</label>
-                                            <Input defaultValue={details.degree_level} disabled className="bg-gray-50" />
-                                        </div>
-                                    </div>
-                                    <div className="grid md:grid-cols-2 gap-4">
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700 mb-1">Domaine</label>
-                                            <Input defaultValue={details.field_of_study} disabled className="bg-gray-50" />
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700 mb-1">Ville cible</label>
-                                            <Input defaultValue={details.target_city} disabled className="bg-gray-50" />
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1">Objectif</label>
-                                        <textarea
-                                            defaultValue={details.objective}
-                                            disabled
-                                            className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 outline-none"
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1">LinkedIn</label>
-                                        <Input defaultValue={details.linkedin_url} disabled className="bg-gray-50" />
-                                    </div>
-                                </>
-                            ) : (
-                                <>
-                                    <div className="grid md:grid-cols-2 gap-4">
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700 mb-1">Entreprise</label>
-                                            <Input defaultValue={details.company} disabled className="bg-gray-50" />
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700 mb-1">Poste</label>
-                                            <Input defaultValue={details.current_position} disabled className="bg-gray-50" />
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1">Formats de coaching</label>
-                                        <div className="flex flex-wrap gap-2 mt-1">
-                                            {details.coaching_formats?.map((format: string) => (
-                                                <span key={format} className="px-2 py-1 bg-green-50 text-green-700 rounded text-xs border border-green-100">
-                                                    {format}
-                                                </span>
-                                            ))}
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1">LinkedIn</label>
-                                        <Input defaultValue={details.linkedin_url} disabled className="bg-gray-50" />
-                                    </div>
-                                </>
-                            )}
-
-                            <div className="pt-4 border-t border-gray-100">
-                                <p className="text-sm text-gray-500 italic">
-                                    Pour modifier ces informations, veuillez contacter le support ou attendre la validation de votre profil.
-                                </p>
-                            </div>
+                <Card>
+                    <div className="flex items-center justify-between mb-6">
+                        <div>
+                            <h2 className="text-xl font-semibold text-gray-900">Documents & vérification</h2>
+                            <p className="text-sm text-gray-500">Dernière mise à jour : {profile.updated_at ? new Date(profile.updated_at).toLocaleDateString() : 'N/A'}</p>
                         </div>
-                    </Card>
-                )}
+                        <Button variant="outline" size="sm" onClick={refreshProfile}>Rafraîchir</Button>
+                    </div>
+
+                    <div className="space-y-6">
+                        {hasStudentRole && (
+                            <div className="space-y-3">
+                                <div className="flex items-center gap-2 text-gray-800 font-semibold">
+                                    <GraduationCap className="h-4 w-4" /> Documents étudiants
+                                </div>
+                                <div className="grid md:grid-cols-2 gap-4 text-sm text-gray-700">
+                                    <InfoRow label="CV" value={studentDetails?.cv_url || 'Non fourni'} />
+                                    <InfoRow label="Justificatif de scolarité" value={studentDetails?.student_proof_url || 'Non fourni'} />
+                                    <InfoRow label="LinkedIn" value={studentDetails?.linkedin_url || 'Non renseigné'} />
+                                    <InfoRow label="Objectif" value={studentDetails?.objective || 'Ajoutez vos objectifs pour être mieux orienté.'} />
+                                </div>
+                            </div>
+                        )}
+
+                        {hasMentorRole && (
+                            <div className="space-y-3 border-t pt-4">
+                                <div className="flex items-center gap-2 text-gray-800 font-semibold">
+                                    <Briefcase className="h-4 w-4" /> Documents & liens mentor
+                                </div>
+                                <div className="grid md:grid-cols-2 gap-4 text-sm text-gray-700">
+                                    <InfoRow label="LinkedIn" value={mentorDetails?.linkedin_url || 'Non renseigné'} />
+                                    <InfoRow label="Justificatifs professionnels" value={mentorDetails?.proof_documents_url?.join(', ') || 'Non fournis'} />
+                                    <InfoRow label="Formats de coaching" value={mentorDetails?.coaching_formats?.join(', ') || 'À définir'} />
+                                    <InfoRow label="Entreprise actuelle" value={mentorDetails?.company || 'Non renseignée'} />
+                                </div>
+                            </div>
+                        )}
+
+                        {loading && <p className="text-sm text-gray-400">Chargement des données...</p>}
+                    </div>
+                </Card>
             </div>
+        </div>
+    )
+}
+
+function InfoRow({ label, value }: { label: string; value: string }) {
+    return (
+        <div className="space-y-1">
+            <p className="text-xs uppercase text-gray-500 font-semibold">{label}</p>
+            <p className="text-gray-800">{value}</p>
         </div>
     )
 }

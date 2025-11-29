@@ -30,10 +30,12 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
  * Types de base de données
  * Synchronisés avec le schéma Supabase
  */
+type ProfileRole = 'student' | 'mentor' | 'student,mentor' | 'mentor,student' | string[]
+
 export type Profile = {
   id: string
   user_id: string
-  role: 'student' | 'mentor'
+  role: ProfileRole
   status: 'pending_verification' | 'under_review' | 'verified' | 'rejected'
   full_name: string | null
   bio: string | null

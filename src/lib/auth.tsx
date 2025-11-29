@@ -16,6 +16,7 @@ interface AuthContextType {
   signIn: (email: string, password: string) => Promise<{ error: any }>
   signUp: (email: string, password: string) => Promise<{ data: any; error: any }>
   signOut: () => Promise<void>
+  logout: () => Promise<void>
   refreshProfile: () => Promise<void>
 }
 
@@ -136,6 +137,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setProfile(null)
   }
 
+  const logout = async () => {
+    await signOut()
+  }
+
   const value = {
     user,
     session,
@@ -144,6 +149,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     signIn,
     signUp,
     signOut,
+    logout,
     refreshProfile,
   }
 
