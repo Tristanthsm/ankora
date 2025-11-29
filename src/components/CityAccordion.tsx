@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { MapPin } from 'lucide-react';
+import { MagneticButton } from '@/components/ui/MagneticButton';
 
 // --- Data for the image accordion ---
 const cities = [
@@ -119,12 +120,14 @@ export default function CityAccordion() {
                         <p className="text-lg text-gray-600 leading-relaxed">
                             Que vous soyez à Paris, New York ou Tokyo, trouvez le mentor idéal qui comprend votre contexte local et vos ambitions globales.
                         </p>
-                        <button
-                            onClick={handleItemClick}
-                            className="inline-flex items-center justify-center px-8 py-4 text-base font-medium text-white bg-blue-600 rounded-full hover:bg-blue-700 transition-all shadow-lg hover:shadow-blue-600/30 hover:-translate-y-1"
-                        >
-                            Explorer la marketplace
-                        </button>
+                        <MagneticButton>
+                            <button
+                                onClick={handleItemClick}
+                                className="inline-flex items-center justify-center px-8 py-4 text-base font-medium text-white bg-blue-600 rounded-full hover:bg-blue-700 transition-all shadow-lg hover:shadow-blue-600/30 hover:-translate-y-1"
+                            >
+                                Explorer la marketplace
+                            </button>
+                        </MagneticButton>
                     </div>
 
                     {/* Right Side: Image Accordion */}

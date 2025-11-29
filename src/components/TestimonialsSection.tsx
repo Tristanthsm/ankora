@@ -90,7 +90,7 @@ const TestimonialsColumn = (props: {
 
 export function TestimonialsSection() {
   return (
-    <section className="py-20 bg-gray-50 overflow-hidden">
+    <section className="py-20 bg-white overflow-hidden">
       <div className="container-custom mb-12 text-center">
         <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
           Ils nous font confiance
@@ -102,8 +102,8 @@ export function TestimonialsSection() {
 
       <div className="relative h-[600px] overflow-hidden">
         {/* Gradients for fade effect */}
-        <div className="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-gray-50 to-transparent z-10" />
-        <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-gray-50 to-transparent z-10" />
+        <div className="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-white to-transparent z-10" />
+        <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-white to-transparent z-10" />
 
         <div className="container-custom grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 h-full items-start">
           <TestimonialsColumn

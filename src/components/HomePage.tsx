@@ -4,6 +4,8 @@ import FeaturesSection from "./FeaturesSection"
 import { TestimonialsSection } from "./TestimonialsSection"
 import Footer from "./Footer"
 import CityAccordion from "./CityAccordion"
+import { GooeyText } from "./ui/GooeyText"
+import { GradientButton } from "./ui/GradientButton"
 
 export default function HomePage() {
     return (
@@ -18,13 +20,24 @@ export default function HomePage() {
                 <section className="py-20 bg-blue-600 relative overflow-hidden">
                     <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
                     <div className="container-custom relative z-10 text-center text-white">
-                        <h2 className="text-3xl md:text-5xl font-bold mb-6">Prêt à transformer votre avenir ?</h2>
+                        <h2 className="text-3xl md:text-5xl font-bold mb-6 flex flex-col md:flex-row items-center justify-center gap-2">
+                            <span>Prêt à transformer votre</span>
+                            <GooeyText
+                                texts={["avenir", "carrière", "futur", "vie"]}
+                                textClassName="text-3xl md:text-5xl font-bold text-white"
+                                className="h-[40px] md:h-[60px] w-[150px] md:w-[200px]"
+                            />
+                            <span>?</span>
+                        </h2>
                         <p className="text-xl text-blue-100 mb-10 max-w-2xl mx-auto">
                             Rejoignez dès aujourd'hui la communauté Ankora et commencez votre voyage vers l'excellence.
                         </p>
-                        <button className="px-8 py-4 bg-white text-blue-600 rounded-full font-bold text-lg hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl hover:-translate-y-1">
+                        <GradientButton
+                            onClick={() => window.location.href = '/register'}
+                            className="shadow-xl hover:shadow-2xl"
+                        >
                             Créer mon compte gratuitement
-                        </button>
+                        </GradientButton>
                     </div>
                 </section>
             </main>

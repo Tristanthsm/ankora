@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
+import { FlowButton } from "@/components/ui/FlowButton";
 
 function FloatingPaths({ position }: { position: number }) {
   const paths = Array.from({ length: 36 }, (_, i) => ({
@@ -102,43 +102,14 @@ export function Ankora({
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <div
-              className="inline-block group relative bg-gradient-to-b from-black/10 to-white/10 p-px rounded-2xl backdrop-blur-lg
-                        overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
-            >
-              <Button
-                variant="ghost"
-                onClick={() => window.location.href = '/register'}
-                className="rounded-[1.15rem] px-8 py-6 text-lg font-semibold backdrop-blur-md
-                              bg-white/95 hover:bg-white/100
-                              text-black transition-all duration-300
-                              group-hover:-translate-y-0.5 border border-black/10
-                              hover:shadow-md"
-              >
-                <span className="opacity-90 group-hover:opacity-100 transition-opacity">
-                  Je recherche un stage
-                </span>
-              </Button>
-            </div>
-
-            <div
-              className="inline-block group relative bg-gradient-to-b from-black/10 to-white/10 p-px rounded-2xl backdrop-blur-lg
-                        overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
-            >
-              <Button
-                variant="ghost"
-                onClick={() => window.location.href = '/register'}
-                className="rounded-[1.15rem] px-8 py-6 text-lg font-semibold backdrop-blur-md
-                              bg-white/95 hover:bg-white/100
-                              text-black transition-all duration-300
-                              group-hover:-translate-y-0.5 border border-black/10
-                              hover:shadow-md"
-              >
-                <span className="opacity-90 group-hover:opacity-100 transition-opacity">
-                  Je propose mes services
-                </span>
-              </Button>
-            </div>
+            <FlowButton
+              text="Je recherche un stage"
+              onClick={() => window.location.href = '/register'}
+            />
+            <FlowButton
+              text="Je propose mes services"
+              onClick={() => window.location.href = '/register'}
+            />
           </div>
         </motion.div>
       </div>

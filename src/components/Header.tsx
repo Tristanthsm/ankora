@@ -37,7 +37,7 @@ export default function Header() {
           <img
             src="/ankora-logo.png"
             alt="ANKORA Global Connect"
-            className="h-20 w-auto object-contain transition-transform group-hover:scale-105"
+            className="h-32 w-auto object-contain transition-transform group-hover:scale-105"
           />
         </Link>
 
