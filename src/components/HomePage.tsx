@@ -1,5 +1,6 @@
 import Header from "./Header"
 import { Ankora } from "./BackgroundPaths"
+import WaitlistSection from "./WaitlistSection"
 import FeaturesSection from "./FeaturesSection"
 import { TestimonialsSection } from "./TestimonialsSection"
 import Footer from "./Footer"
@@ -13,6 +14,7 @@ export default function HomePage() {
             <Header />
             <main>
                 <Ankora />
+                <WaitlistSection />
                 <CityAccordion />
                 <FeaturesSection />
                 <TestimonialsSection />
