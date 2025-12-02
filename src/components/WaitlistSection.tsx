@@ -7,14 +7,26 @@ const ROLE_OPTIONS = [
 ]
 
 export default function WaitlistSection() {
+    const [firstName, setFirstName] = useState("")
+    const [lastName, setLastName] = useState("")
+    const [country, setCountry] = useState("")
+    const [schoolName, setSchoolName] = useState("")
     const [email, setEmail] = useState("")
     const [selectedRoles, setSelectedRoles] = useState<string[]>([])
     const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle")
     const [errorMessage, setErrorMessage] = useState("")
 
+    const isStudent = useMemo(() => selectedRoles.includes("student"), [selectedRoles])
+
     const canSubmit = useMemo(
-        () => email.trim().length > 0 && selectedRoles.length > 0,
-        [email, selectedRoles]
+        () =>
+            email.trim().length > 0 &&
+            firstName.trim().length > 0 &&
+            lastName.trim().length > 0 &&
+            country.trim().length > 0 &&
+            (!isStudent || schoolName.trim().length > 0) &&
+            selectedRoles.length > 0,
+        [country, email, firstName, isStudent, lastName, schoolName, selectedRoles]
     )
 
     const toggleRole = (role: string) => {
@@ -24,6 +36,10 @@ export default function WaitlistSection() {
     }
 
     const resetForm = () => {
+        setFirstName("")
+        setLastName("")
+        setCountry("")
+        setSchoolName("")
         setEmail("")
         setSelectedRoles([])
     }
@@ -33,7 +49,9 @@ export default function WaitlistSection() {
         setErrorMessage("")
 
         if (!canSubmit) {
-            setErrorMessage("Merci d'indiquer une adresse email et au moins une préférence.")
+            setErrorMessage(
+                "Merci de renseigner tous les champs obligatoires et de choisir au moins un rôle."
+            )
             return
         }
 
@@ -46,6 +64,10 @@ export default function WaitlistSection() {
         if (supabaseConfigured) {
             const { error } = await supabase.from("waitlist_signups").insert({
                 email: email.trim(),
+                first_name: firstName.trim(),
+                last_name: lastName.trim(),
+                country: country.trim(),
+                school_name: isStudent ? schoolName.trim() : null,
                 roles: selectedRoles,
             })
 
@@ -66,7 +88,6 @@ export default function WaitlistSection() {
         <section className="relative py-20 bg-gradient-to-b from-white via-blue-50 to-white overflow-hidden">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(59,130,246,0.15),transparent_50%)]" />
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(37,99,235,0.12),transparent_45%)]" />
-
             <div className="container-custom relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <div className="space-y-6">
                     <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-600">
@@ -97,6 +118,37 @@ export default function WaitlistSection() {
 
                 <div className="bg-white/80 backdrop-blur rounded-3xl shadow-xl border border-blue-100 p-8">
                     <form className="space-y-6" onSubmit={handleSubmit}>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <label htmlFor="waitlist-first-name" className="text-sm font-semibold text-slate-800">
+                                    Prénom
+                                </label>
+                                <input
+                                    id="waitlist-first-name"
+                                    type="text"
+                                    value={firstName}
+                                    onChange={(event) => setFirstName(event.target.value)}
+                                    placeholder="Ex. Fatou"
+                                    className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-900 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                                    required
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <label htmlFor="waitlist-last-name" className="text-sm font-semibold text-slate-800">
+                                    Nom de famille
+                                </label>
+                                <input
+                                    id="waitlist-last-name"
+                                    type="text"
+                                    value={lastName}
+                                    onChange={(event) => setLastName(event.target.value)}
+                                    placeholder="Ex. Diallo"
+                                    className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-900 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                                    required
+                                />
+                            </div>
+                        </div>
+
                         <div className="space-y-2">
                             <label htmlFor="waitlist-email" className="text-sm font-semibold text-slate-800">
                                 Adresse email
@@ -107,6 +159,21 @@ export default function WaitlistSection() {
                                 value={email}
                                 onChange={(event) => setEmail(event.target.value)}
                                 placeholder="vous@example.com"
+                                className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-900 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                                required
+                            />
+                        </div>
+
+                        <div className="space-y-2">
+                            <label htmlFor="waitlist-country" className="text-sm font-semibold text-slate-800">
+                                Pays
+                            </label>
+                            <input
+                                id="waitlist-country"
+                                type="text"
+                                value={country}
+                                onChange={(event) => setCountry(event.target.value)}
+                                placeholder="Ex. Sénégal"
                                 className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-900 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
                                 required
                             />
@@ -138,6 +205,23 @@ export default function WaitlistSection() {
                                 Vous pouvez sélectionner les deux options si vous souhaitez explorer plusieurs rôles.
                             </p>
                         </div>
+
+                        {isStudent && (
+                            <div className="space-y-2">
+                                <label htmlFor="waitlist-school" className="text-sm font-semibold text-slate-800">
+                                    Nom de l'école
+                                </label>
+                                <input
+                                    id="waitlist-school"
+                                    type="text"
+                                    value={schoolName}
+                                    onChange={(event) => setSchoolName(event.target.value)}
+                                    placeholder="Ex. Université Cheikh Anta Diop"
+                                    className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-900 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                                    required={isStudent}
+                                />
+                            </div>
+                        )}
 
                         {errorMessage && (
                             <p className="text-sm text-red-600 bg-red-50 border border-red-100 rounded-xl px-4 py-3">
