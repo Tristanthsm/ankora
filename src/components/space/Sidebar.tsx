@@ -59,15 +59,7 @@ export function Sidebar() {
                     </div>
                 </div>
 
-                {/* Admin - Test Mode */}
-                <div>
-                    <div className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-red-500">
-                        Admin (Test)
-                    </div>
-                    <div className="space-y-1">
-                        <NavItem to="/space/admin" icon={User} label="Mode Admin" />
-                    </div>
-                </div>
+
 
                 {/* Student Section */}
                 {(isStudent || (!isStudent && !isMentor)) && (
@@ -78,6 +70,7 @@ export function Sidebar() {
                         <div className="space-y-1">
                             <NavItem to="/space/search" icon={Search} label="Trouver un mentor" />
                             <NavItem to="/space/requests" icon={Send} label="Mes requêtes" />
+                            <NavItem to="/space/student/profile" icon={User} label="Mon Profil" />
                         </div>
                     </div>
                 )}

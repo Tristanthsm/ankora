@@ -26,6 +26,7 @@ import SpaceLayout from './pages/space/Layout'
 import SpaceDashboardPage from './pages/space/Dashboard'
 import DocumentsPage from './pages/space/Documents'
 import ContractsPage from './pages/space/Contracts'
+import StudentProfileEditor from './pages/space/student/ProfileEditor'
 import MentorProfileEditor from './pages/space/mentor/ProfileEditor'
 import MentorApplicationStatus from './pages/space/mentor/ApplicationStatus'
 import MentorApplicationForm from './pages/space/mentor/ApplicationForm'
@@ -109,6 +110,7 @@ function App() {
               <Route path="students" element={<MentorStudentsPage />} />
               <Route path="messages" element={<InboxPage />} />
               <Route path="profile" element={<Account />} />
+              <Route path="student/profile" element={<StudentProfileEditor />} />
               <Route path="documents" element={<DocumentsPage />} />
               <Route path="contracts" element={<ContractsPage />} />
               <Route path="mentor-profile" element={<MentorProfileEditor />} />
