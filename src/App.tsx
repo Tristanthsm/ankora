@@ -12,16 +12,10 @@ import MentorPublicProfile from './pages/MentorPublicProfile'
 import HowItWorks from './pages/HowItWorks'
 import BecomeMentor from './pages/BecomeMentor'
 import FAQ from './pages/FAQ'
-import StudentLayout from './pages/student/Layout'
 import StudentSearchPage from './pages/student/Search'
 import StudentRequestsPage from './pages/student/Requests'
-import StudentMessagesPage from './pages/student/Messages'
-import StudentProfilePage from './pages/student/Profile'
-import MentorLayout from './pages/mentor/Layout'
 import MentorRequestsPage from './pages/mentor/Requests'
 import MentorStudentsPage from './pages/mentor/Students'
-import MentorMessagesPage from './pages/mentor/Messages'
-import MentorProfilePage from './pages/mentor/Profile'
 import ConversationPage from './pages/messages/Conversation'
 import InboxPage from './pages/messages/Inbox'
 import Settings from './pages/Settings'
@@ -31,6 +25,11 @@ import PublicTabBar from './components/layout/PublicTabBar'
 import SpaceLayout from './pages/space/Layout'
 import SpaceDashboardPage from './pages/space/Dashboard'
 import DocumentsPage from './pages/space/Documents'
+import ContractsPage from './pages/space/Contracts'
+import MentorProfileEditor from './pages/space/mentor/ProfileEditor'
+import MentorApplicationStatus from './pages/space/mentor/ApplicationStatus'
+import MentorApplicationForm from './pages/space/mentor/ApplicationForm'
+import AdminPage from './pages/space/Admin'
 
 import ScrollToTop from './components/ScrollToTop'
 
@@ -111,40 +110,14 @@ function App() {
               <Route path="messages" element={<InboxPage />} />
               <Route path="profile" element={<Account />} />
               <Route path="documents" element={<DocumentsPage />} />
+              <Route path="contracts" element={<ContractsPage />} />
+              <Route path="mentor-profile" element={<MentorProfileEditor />} />
+              <Route path="mentor-application" element={<MentorApplicationStatus />} />
+              <Route path="mentor-application/apply" element={<MentorApplicationForm />} />
+              <Route path="admin" element={<AdminPage />} />
             </Route>
 
-            {/* Espaces séparés (maintenus pour compatibilité) */}
-            <Route
-              path="/student"
-              element={
-                <ProtectedRoute>
-                  <StudentLayout />
-                </ProtectedRoute>
-              }
-            >
-              <Route index element={<Navigate to="/space" replace />} />
-              <Route path="dashboard" element={<Navigate to="/space" replace />} />
-              <Route path="search" element={<StudentSearchPage />} />
-              <Route path="requests" element={<StudentRequestsPage />} />
-              <Route path="messages" element={<StudentMessagesPage />} />
-              <Route path="profile" element={<StudentProfilePage />} />
-            </Route>
 
-            <Route
-              path="/mentor"
-              element={
-                <ProtectedRoute>
-                  <MentorLayout />
-                </ProtectedRoute>
-              }
-            >
-              <Route index element={<Navigate to="/space" replace />} />
-              <Route path="dashboard" element={<Navigate to="/space" replace />} />
-              <Route path="requests" element={<MentorRequestsPage />} />
-              <Route path="students" element={<MentorStudentsPage />} />
-              <Route path="messages" element={<MentorMessagesPage />} />
-              <Route path="profile" element={<MentorProfilePage />} />
-            </Route>
 
             <Route
               path="/messages/:conversationId"

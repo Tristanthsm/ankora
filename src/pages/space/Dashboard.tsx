@@ -11,7 +11,7 @@ import MentorOnboardingForm from '../../components/onboarding/MentorOnboardingFo
 import { GraduationCap, Briefcase, CheckCircle, AlertCircle, FileText, Upload } from 'lucide-react'
 
 export default function SpaceDashboard() {
-  const { profile, loading } = useAuth()
+  const { profile, loading, studentDetails, mentorDetails } = useAuth()
   const [activeRole, setActiveRole] = useState<'student' | 'mentor' | null>(null)
 
   if (loading) {
@@ -124,7 +124,7 @@ export default function SpaceDashboard() {
                 {statusIcon[profile.status as keyof typeof statusIcon]}
                 <div>
                   <p className="font-semibold text-gray-900">
-                    Statut : {statusLabel[profile.status]}
+                    Statut : {statusLabel[profile.status] || 'Inconnu'}
                   </p>
                   <p className="text-sm text-gray-600">
                     Votre profil est en cours de vérification. Vous pouvez toujours utiliser la plateforme.
@@ -148,9 +148,9 @@ export default function SpaceDashboard() {
                   </Badge>
                 </div>
                 <div className="space-y-2 text-sm">
-                  <InfoRow label="École" value={profile?.bio || 'Non renseignée'} />
-                  <InfoRow label="Pays cibles" value="Canada, Allemagne" />
-                  <InfoRow label="Statut" value={profile?.status ? statusLabel[profile.status] : 'En attente'} />
+                  <InfoRow label="École" value={studentDetails?.school || 'Non renseignée'} />
+                  <InfoRow label="Pays cibles" value={studentDetails?.target_countries?.join(', ') || 'Non renseignés'} />
+                  <InfoRow label="Objectif" value={studentDetails?.objective || 'Non renseigné'} />
                 </div>
                 <div className="flex gap-2 pt-4 border-t">
                   <Link to="/space/search" className="flex-1">
@@ -175,9 +175,9 @@ export default function SpaceDashboard() {
                   </Badge>
                 </div>
                 <div className="space-y-2 text-sm">
-                  <InfoRow label="Poste" value={profile?.position || 'Non renseigné'} />
-                  <InfoRow label="Entreprise" value={profile?.company || 'Non renseignée'} />
-                  <InfoRow label="Secteurs" value={profile?.expertise_areas?.join(', ') || 'Non renseignés'} />
+                  <InfoRow label="Poste" value={mentorDetails?.current_position || profile?.position || 'Non renseigné'} />
+                  <InfoRow label="Entreprise" value={mentorDetails?.company || profile?.company || 'Non renseignée'} />
+                  <InfoRow label="Secteurs" value={mentorDetails?.expertise_sectors?.join(', ') || 'Non renseignés'} />
                 </div>
                 <div className="flex gap-2 pt-4 border-t">
                   <Link to="/space/mentor-requests" className="flex-1">
@@ -206,21 +206,29 @@ export default function SpaceDashboard() {
               </Link>
             </div>
             <div className="grid md:grid-cols-3 gap-4">
-              <DocumentCard
-                title="CV"
-                status={isStudent ? "À fournir" : "Non requis"}
-                required={isStudent}
-              />
-              <DocumentCard
-                title="Preuve d'étudiant"
-                status={isStudent ? "À fournir" : "Non requis"}
-                required={isStudent}
-              />
-              <DocumentCard
-                title="Documents de preuve"
-                status={isMentor ? "À fournir" : "Non requis"}
-                required={isMentor}
-              />
+
+              {isStudent && (
+                <>
+                  <DocumentCard
+                    title="CV"
+                    status={studentDetails?.cv_url ? "Reçu" : "À fournir"}
+                    required={true}
+                  />
+                  <DocumentCard
+                    title="Preuve scolarité"
+                    status={studentDetails?.student_proof_url ? "Reçu" : "À fournir"}
+                    required={true}
+                  />
+                </>
+              )}
+
+              {isMentor && (
+                <DocumentCard
+                  title="Preuves expertise"
+                  status={(mentorDetails?.proof_documents_url && mentorDetails.proof_documents_url.length > 0) ? "Reçu" : "À fournir"}
+                  required={true}
+                />
+              )}
             </div>
           </Card>
 

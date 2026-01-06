@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
 interface AuthLayoutProps {
@@ -8,30 +8,69 @@ interface AuthLayoutProps {
 }
 
 export function AuthLayout({ children, title, subtitle }: AuthLayoutProps) {
-    return (
-        <main className="relative min-h-screen overflow-hidden bg-white">
-            {/* Background Elements */}
-            <div className="bg-[radial-gradient(68.54%_68.72%_at_55.02%_31.46%,rgba(0,0,0,0.03)_0,rgba(0,0,0,0.01)_50%,rgba(0,0,0,0)_80%)] absolute top-0 right-0 h-[320px] w-[140px] -translate-y-[87.5px] rounded-full" />
-            <div className="bg-[radial-gradient(50%_50%_at_50%_50%,rgba(0,0,0,0.02)_0,rgba(0,0,0,0)_100%)] absolute bottom-0 left-0 h-[320px] w-[320px] translate-y-[87.5px] rounded-full" />
+    useEffect(() => {
+        const viewer = document.querySelector('spline-viewer');
+        if (viewer && viewer.shadowRoot) {
+            const style = document.createElement('style');
+            style.textContent = `
+                #logo { display: none !important; }
+                canvas { cursor: auto !important; }
+            `;
+            viewer.shadowRoot.appendChild(style);
+        }
+    }, []);
 
-            <div className="container-custom relative z-10 flex min-h-screen flex-col items-center justify-center py-12">
-                <div className="mb-8 text-center">
-                    <Link to="/" className="inline-block mb-8 group">
-                        <img
-                            src="/ankora-logo.png"
-                            alt="ANKORA Global Connect"
-                            className="h-16 w-auto object-contain transition-transform group-hover:scale-105"
-                        />
-                    </Link>
-                    <h1 className="font-heading text-2xl font-bold tracking-wide text-gray-900">
-                        {title}
-                    </h1>
-                    <p className="text-gray-500 text-base">
-                        {subtitle}
-                    </p>
+    return (
+        <main className="fixed inset-0 w-full bg-white overflow-hidden flex font-sans">
+            {/* Left Side - Form Content */}
+            <div className="w-full lg:w-1/2 flex flex-col relative h-full overflow-y-auto">
+                {/* Background Decor */}
+                <div className="absolute inset-0 z-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] opacity-25"></div>
+                <div className="absolute inset-0 z-0 bg-gradient-to-tr from-blue-50/50 via-transparent to-transparent"></div>
+
+                {/* Content Container */}
+                <div className="flex-1 flex flex-col items-center justify-center p-8 md:p-12 relative z-10">
+                    <div className="w-full max-w-[440px] space-y-8">
+                        <div className="text-center">
+                            <Link to="/" className="inline-block mb-8 group relative">
+                                <div className="absolute inset-0 bg-blue-500/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                                <img
+                                    src="/ankora-logo.png"
+                                    alt="ANKORA Global Connect"
+                                    className="h-28 w-auto object-contain relative transition-transform duration-300 group-hover:scale-105 drop-shadow-sm"
+                                />
+                            </Link>
+                            <h1 className="font-heading text-4xl font-bold tracking-tight text-gray-900 mb-3">
+                                {title}
+                            </h1>
+                            <p className="text-gray-500 text-lg leading-relaxed">
+                                {subtitle}
+                            </p>
+                        </div>
+
+                        {children}
+                    </div>
                 </div>
 
-                {children}
+                {/* Footer */}
+                <div className="relative z-10 p-6 text-center">
+                    <p className="text-xs text-gray-400">
+                        &copy; {new Date().getFullYear()} Ankora Global Connect.
+                        <span className="mx-2">&middot;</span>
+                        <Link to="/privacy" className="hover:text-gray-600 transition-colors">Confidentialité</Link>
+                        <span className="mx-2">&middot;</span>
+                        <Link to="/terms" className="hover:text-gray-600 transition-colors">Conditions</Link>
+                    </p>
+                </div>
+            </div>
+
+            {/* Right Side - Visual (Hidden on mobile) */}
+            <div className="hidden lg:flex lg:w-1/2 relative bg-black items-center justify-center overflow-hidden pointer-events-none">
+                <div className="absolute inset-0">
+                    <spline-viewer url="https://prod.spline.design/gKsclxAw8RdQiCoC/scene.splinecode"></spline-viewer>
+                </div>
+                {/* Gradient overlay for better blend */}
+                <div className="absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-black/20"></div>
             </div>
         </main>
     )

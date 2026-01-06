@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react'
 import { User, Session } from '@supabase/supabase-js'
 import { supabase } from './supabase'
-import { Profile } from './supabase'
+import { Profile, StudentDetails, MentorDetails } from './supabase'
 
 /**
  * Contexte d'authentification
@@ -12,12 +12,15 @@ interface AuthContextType {
   user: User | null
   session: Session | null
   profile: Profile | null
+  studentDetails: StudentDetails | null
+  mentorDetails: MentorDetails | null
   loading: boolean
   signIn: (email: string, password: string) => Promise<{ error: any }>
   signUp: (email: string, password: string) => Promise<{ data: any; error: any }>
   signOut: () => Promise<void>
   logout: () => Promise<void>
   refreshProfile: () => Promise<void>
+  signInWithGoogle: () => Promise<{ error: any }>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -30,32 +33,70 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [session, setSession] = useState<Session | null>(null)
   const [profile, setProfile] = useState<Profile | null>(null)
+  const [studentDetails, setStudentDetails] = useState<StudentDetails | null>(null)
+  const [mentorDetails, setMentorDetails] = useState<MentorDetails | null>(null)
   const [loading, setLoading] = useState(true)
 
   /**
-   * Charge le profil utilisateur depuis la base de données
+   * Charge le profil utilisateur et les détails associés depuis la base de données
    */
   const loadProfile = async (userId: string) => {
     try {
-      const { data, error } = await supabase
+      // 1. Fetch Profile
+      const { data: profileData, error: profileError } = await supabase
         .from('profiles')
         .select('*')
         .eq('user_id', userId)
         .single()
 
-      if (error) {
-        // Si le profil n'existe pas (code PGRST116), c'est normal pour un nouvel utilisateur
-        if (error.code === 'PGRST116') {
+      if (profileError) {
+        if (profileError.code === 'PGRST116') {
           console.log('Profil non trouvé - utilisateur doit compléter l\'onboarding')
           setProfile(null)
+          setStudentDetails(null)
+          setMentorDetails(null)
           return
         }
-        throw error
+        throw profileError
       }
-      setProfile(data)
+
+      // --- DEMO OVERRIDE START ---
+      // Si un rôle de démo est forcé en local, on l'applique par dessus la donnée DB
+      const demoRole = typeof window !== 'undefined' ? localStorage.getItem('ankora_demo_role') : null
+      if (demoRole) {
+        console.log("Applying DEMO ROLE override:", demoRole)
+        profileData.role = demoRole
+        profileData.status = 'verified' // On force aussi le statut pour être sûr
+      }
+      // --- DEMO OVERRIDE END ---
+
+      setProfile(profileData)
+
+      // 2. Fetch Student Details (if applicable or just try to fetch)
+      // We assume 1:1 relation on profile_id (which might be the profile UUID, not user UUID)
+      // We have profileData.id now.
+
+      const { data: studentData } = await supabase
+        .from('student_details')
+        .select('*')
+        .eq('profile_id', profileData.id)
+        .single()
+
+      setStudentDetails(studentData)
+
+      // 3. Fetch Mentor Details
+      const { data: mentorData } = await supabase
+        .from('mentor_details')
+        .select('*')
+        .eq('profile_id', profileData.id)
+        .single()
+
+      setMentorDetails(mentorData)
+
     } catch (error) {
       console.error('Erreur lors du chargement du profil:', error)
       setProfile(null)
+      // Keep details null on error
     }
   }
 
@@ -88,7 +129,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .then(async ({ data: { session }, error }) => {
         clearTimeout(timeoutId)
         if (!mounted) return
-        
+
         if (error) {
           console.error('Erreur lors de la récupération de la session:', error)
           setLoading(false)
@@ -119,7 +160,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (_event, session) => {
       if (!mounted) return
-      
+
       setSession(session)
       setUser(session?.user ?? null)
       if (session?.user) {
@@ -130,6 +171,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
       } else {
         setProfile(null)
+        setStudentDetails(null)
+        setMentorDetails(null)
       }
       setLoading(false)
     })
@@ -191,6 +234,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setSession(null)
       setUser(null)
       setProfile(null)
+      setStudentDetails(null)
+      setMentorDetails(null)
     }
   }
 
@@ -198,16 +243,32 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await signOut()
   }
 
+  /**
+   * Connexion avec Google
+   */
+  const signInWithGoogle = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${window.location.origin}/space`
+      }
+    })
+    return { error }
+  }
+
   const value = {
     user,
     session,
     profile,
+    studentDetails,
+    mentorDetails,
     loading,
     signIn,
     signUp,
     signOut,
     logout,
     refreshProfile,
+    signInWithGoogle,
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

@@ -53,6 +53,8 @@ export type Profile = {
   position: string | null
   languages: string[] | null
   expertise_areas: string[] | null
+  image_url?: string | null
+  id_card_url?: string | null
   created_at: string
   updated_at: string
 }
@@ -74,6 +76,9 @@ export type StudentDetails = {
   linkedin_url: string | null
   cv_url: string | null
   student_proof_url: string | null
+  transcript_url?: string | null
+  portfolio_url?: string | null
+  motivational_letter_url?: string | null
   created_at: string
   updated_at: string
 }
@@ -84,14 +89,29 @@ export type MentorDetails = {
   current_position: string | null
   company: string | null
   experience_years: number | null
-  expertise_sectors: string[] | null
-  countries_network: string[] | null
-  help_types: string[] | null
-  contact_types: string[] | null
-  coaching_formats: string[] | null
+  expertise_sectors: string[] | null // e.g. ["Product", "Finance"]
+  countries_network: any | null // JSON object for multi-country
+
+  // New fields for Advanced Form
+  short_pitch: string | null
+  hourly_rate: number | null
+  pack_price: number | null // Optional
+  services: any | null // JSON object for structured services
+  response_time: string | null // e.g. "24h", "48h"
+  availability: any | null // JSON object for schedule { "mon": ["09:00-11:00"], ... }
+  key_skills: string[] | null // e.g. ["Agile", "Leadership"]
+  mentoring_style: string[] | null
+  career_highlights: string[] | null
+  outcomes: string[] | null
+
   linkedin_url: string | null
   proof_documents_url: string[] | null
+  cv_url: string | null
+  diploma_url?: string | null
+  reference_letter_url?: string | null
+  identification_number?: string | null
   max_students_per_month: number | null
+
   created_at: string
   updated_at: string
 }
@@ -113,4 +133,3 @@ export type Message = {
   content: string
   created_at: string
 }
-

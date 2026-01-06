@@ -1,57 +1,30 @@
-import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { useAuth } from '../lib/auth'
+import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { AuthForm } from '../components/auth/AuthForm'
+import { AuthLayout } from '../components/auth/AuthLayout'
 import { Home } from 'lucide-react'
 
 export default function Register() {
-  const [error, setError] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
-  const { signUp } = useAuth()
   const navigate = useNavigate()
 
-  const handleEmailSubmit = async (data: { email: string; password?: string }) => {
-    setError('')
-
-    if (!data.password || data.password.length < 6) {
-      setError('Le mot de passe doit contenir au moins 6 caractères')
-      return
-    }
-
-    setIsLoading(true)
-
-    try {
-      const { error } = await signUp(data.email, data.password)
-      if (error) {
-        setError(error.message || 'Erreur lors de l\'inscription')
-      } else {
-        navigate('/login?registered=true')
-      }
-    } catch (err) {
-      setError('Une erreur inattendue s\'est produite')
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+    <AuthLayout
+      title="Rejoignez-nous"
+      subtitle="Créez votre compte gratuitement"
+    >
       <div className="w-full max-w-md">
         <Link
           to="/"
-          className="inline-flex items-center gap-2 text-sm text-blue-600 hover:text-blue-700"
+          className="inline-flex items-center gap-2 text-sm text-blue-600 hover:text-blue-700 mb-4 font-medium bg-white/80 backdrop-blur-sm px-3 py-1 rounded-full"
         >
           <Home className="h-4 w-4" />
           Retour à l'accueil
         </Link>
         <AuthForm
-          mode="register"
-          onEmailSubmit={handleEmailSubmit}
-          isLoading={isLoading}
-          error={error}
-          onSocialSignIn={(provider) => console.log('Social sign in:', provider)}
+          initialMode="signup"
+          onSuccess={() => navigate('/')}
         />
       </div>
-    </div>
+    </AuthLayout>
   )
 }

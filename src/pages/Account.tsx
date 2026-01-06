@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { useAuth } from '../lib/auth'
 import { hasRole } from '../lib/roles'
 import { supabase, StudentDetails, MentorDetails } from '../lib/supabase'
@@ -11,11 +11,11 @@ import SectionHeader from '../components/SectionHeader'
 import {
   Briefcase,
   AlertCircle,
-  CheckCircle, 
-  Clock, 
-  GraduationCap, 
-  Globe2, 
-  Languages, 
+  CheckCircle,
+  Clock,
+  GraduationCap,
+  Globe2,
+  Languages,
   User,
   Mail,
   MapPin,
@@ -29,10 +29,11 @@ import {
 export default function Account() {
   const { user, profile, refreshProfile, signOut } = useAuth()
   const [loading, setLoading] = useState(false)
+  const [isLoggingOut, setIsLoggingOut] = useState(false)
   const [studentDetails, setStudentDetails] = useState<StudentDetails | null>(null)
   const [mentorDetails, setMentorDetails] = useState<MentorDetails | null>(null)
   const [isEditing, setIsEditing] = useState<string | null>(null)
-  const navigate = useNavigate()
+
 
   const fetchDetails = useCallback(async () => {
     if (!profile) return
@@ -103,9 +104,31 @@ export default function Account() {
   const hasStudentRole = profile && hasRole(profile, 'student')
   const hasMentorRole = profile && hasRole(profile, 'mentor')
 
+  const location = useLocation()
+  const isSpace = location.pathname.includes('/space')
+
   const handleLogout = async () => {
-    await signOut()
-    navigate('/login')
+    setIsLoggingOut(true)
+
+    // Create a timeout promise that resolves after 1 second
+    const timeoutPromise = new Promise((resolve) => {
+      setTimeout(() => resolve('timeout'), 1000)
+    })
+
+    try {
+      // Race between signOut and timeout
+      await Promise.race([signOut(), timeoutPromise])
+    } catch (error) {
+      console.error("Logout error", error)
+    } finally {
+      // CLEAR LOCAL STORAGE TO PREVENT AUTO-LOGIN
+      // This is critical if Supabase client is unresponsive
+      localStorage.clear()
+      sessionStorage.clear()
+
+      // Force navigation regardless of what happened
+      window.location.href = '/'
+    }
   }
 
   if (!user) {
@@ -120,19 +143,21 @@ export default function Account() {
 
   return (
     <div className="bg-gray-50 min-h-screen">
-      <Navbar />
-      <div className="container-custom py-8">
-        <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+      {!isSpace && <Navbar />}
+      <div className={`container-custom ${isSpace ? 'py-8' : 'pt-24 pb-8'}`}>
+        <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between mb-8">
           <SectionHeader
             eyebrow="Mon profil"
-            title="Vos informations personnelles"
-            description="Gérez toutes vos informations : profil général, stagiaire et mentor."
+            title="Vos informations"
+            description="Gérez votre profil personnel et professionnel."
             align="left"
           />
           <Button
             variant="outline"
-            className="self-start"
+            className="self-start text-red-600 border-red-200 hover:bg-red-50"
             onClick={handleLogout}
+            isLoading={isLoggingOut}
+            disabled={isLoggingOut}
           >
             <LogOut className="h-4 w-4 mr-2" />
             Se déconnecter
@@ -183,27 +208,27 @@ export default function Account() {
             </div>
 
             <div className="grid md:grid-cols-2 gap-6">
-              <InfoField 
-                label="Nom complet" 
-                value={profile?.full_name || 'Non renseigné'} 
+              <InfoField
+                label="Nom complet"
+                value={profile?.full_name || 'Non renseigné'}
                 icon={<User className="h-4 w-4 text-primary-600" />}
                 editable={isEditing === 'general'}
               />
-              <InfoField 
-                label="Email" 
-                value={user.email || 'Non renseigné'} 
+              <InfoField
+                label="Email"
+                value={user.email || 'Non renseigné'}
                 icon={<Mail className="h-4 w-4 text-primary-600" />}
                 editable={false}
               />
-              <InfoField 
-                label="Pays" 
-                value={profile?.country || 'Non renseigné'} 
+              <InfoField
+                label="Pays"
+                value={profile?.country || 'Non renseigné'}
                 icon={<Globe2 className="h-4 w-4 text-primary-600" />}
                 editable={isEditing === 'general'}
               />
-              <InfoField 
-                label="Ville" 
-                value={profile?.city || 'Non renseignée'} 
+              <InfoField
+                label="Ville"
+                value={profile?.city || 'Non renseignée'}
                 icon={<MapPin className="h-4 w-4 text-primary-600" />}
                 editable={isEditing === 'general'}
               />
@@ -267,24 +292,24 @@ export default function Account() {
               </div>
 
               <div className="grid md:grid-cols-2 gap-6">
-                <InfoField 
-                  label="École / Université" 
-                  value={studentDetails?.school || 'Non renseignée'} 
+                <InfoField
+                  label="École / Université"
+                  value={studentDetails?.school || 'Non renseignée'}
                   editable={isEditing === 'student'}
                 />
-                <InfoField 
-                  label="Niveau d'études" 
-                  value={studentDetails?.degree_level || 'Non renseigné'} 
+                <InfoField
+                  label="Niveau d'études"
+                  value={studentDetails?.degree_level || 'Non renseigné'}
                   editable={isEditing === 'student'}
                 />
-                <InfoField 
-                  label="Domaine d'études" 
-                  value={studentDetails?.field_of_study || 'Non renseigné'} 
+                <InfoField
+                  label="Domaine d'études"
+                  value={studentDetails?.field_of_study || 'Non renseigné'}
                   editable={isEditing === 'student'}
                 />
-                <InfoField 
-                  label="Ville cible" 
-                  value={studentDetails?.target_city || 'Non renseignée'} 
+                <InfoField
+                  label="Ville cible"
+                  value={studentDetails?.target_city || 'Non renseignée'}
                   editable={isEditing === 'student'}
                 />
                 <div className="md:col-span-2">
@@ -301,19 +326,19 @@ export default function Account() {
                     )}
                   </div>
                 </div>
-                <InfoField 
-                  label="Type de stage recherché" 
-                  value={studentDetails?.internship_type || 'Non renseigné'} 
+                <InfoField
+                  label="Type de stage recherché"
+                  value={studentDetails?.internship_type || 'Non renseigné'}
                   editable={isEditing === 'student'}
                 />
-                <InfoField 
-                  label="Durée du stage" 
-                  value={studentDetails?.internship_duration || 'Non renseignée'} 
+                <InfoField
+                  label="Durée du stage"
+                  value={studentDetails?.internship_duration || 'Non renseignée'}
                   editable={isEditing === 'student'}
                 />
-                <InfoField 
-                  label="Date de début souhaitée" 
-                  value={studentDetails?.start_date || 'Non renseignée'} 
+                <InfoField
+                  label="Date de début souhaitée"
+                  value={studentDetails?.start_date || 'Non renseignée'}
                   editable={isEditing === 'student'}
                 />
                 <div className="md:col-span-2">
@@ -403,24 +428,24 @@ export default function Account() {
               </div>
 
               <div className="grid md:grid-cols-2 gap-6">
-                <InfoField 
-                  label="Poste actuel" 
-                  value={mentorDetails?.current_position || profile?.position || 'Non renseigné'} 
+                <InfoField
+                  label="Poste actuel"
+                  value={mentorDetails?.current_position || profile?.position || 'Non renseigné'}
                   editable={isEditing === 'mentor'}
                 />
-                <InfoField 
-                  label="Entreprise" 
-                  value={mentorDetails?.company || profile?.company || 'Non renseignée'} 
+                <InfoField
+                  label="Entreprise"
+                  value={mentorDetails?.company || profile?.company || 'Non renseignée'}
                   editable={isEditing === 'mentor'}
                 />
-                <InfoField 
-                  label="Années d'expérience" 
-                  value={mentorDetails?.experience_years ? `${mentorDetails.experience_years} ans` : 'Non renseignées'} 
+                <InfoField
+                  label="Années d'expérience"
+                  value={mentorDetails?.experience_years ? `${mentorDetails.experience_years} ans` : 'Non renseignées'}
                   editable={isEditing === 'mentor'}
                 />
-                <InfoField 
-                  label="Capacité de mentorat" 
-                  value={mentorDetails?.max_students_per_month ? `${mentorDetails.max_students_per_month} étudiants/mois` : 'Non renseignée'} 
+                <InfoField
+                  label="Capacité de mentorat"
+                  value={mentorDetails?.max_students_per_month ? `${mentorDetails.max_students_per_month} étudiants/mois` : 'Non renseignée'}
                   editable={isEditing === 'mentor'}
                 />
                 <div className="md:col-span-2">
@@ -532,12 +557,12 @@ export default function Account() {
   )
 }
 
-function InfoField({ 
-  label, 
-  value, 
-  icon, 
-  editable = false 
-}: { 
+function InfoField({
+  label,
+  value,
+  icon,
+  editable = false
+}: {
   label: string
   value: string
   icon?: React.ReactNode
@@ -549,10 +574,10 @@ function InfoField({
       <div className="flex items-center gap-2 px-3 py-2 bg-gray-50 rounded-lg border border-gray-200 text-sm">
         {icon}
         {editable ? (
-          <Input 
-            value={value} 
+          <Input
+            value={value}
             className="bg-white border-gray-300 flex-1"
-            onChange={() => {}}
+            onChange={() => { }}
           />
         ) : (
           <span className="text-gray-900 flex-1">{value}</span>

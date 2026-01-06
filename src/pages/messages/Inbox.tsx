@@ -40,7 +40,7 @@ export default function InboxPage() {
     const loadConversations = async () => {
       try {
         setLoading(true)
-        
+
         // Récupérer les requêtes où l'utilisateur est impliqué
         const { data: requests, error: requestsError } = await supabase
           .from('requests')
@@ -55,59 +55,65 @@ export default function InboxPage() {
           return
         }
 
-        // Pour chaque requête, récupérer les infos de l'autre utilisateur et le dernier message
-        const conversationsData: ConversationPreview[] = []
-
-        for (const request of requests) {
+        // Pour chaque requête, récupérer les infos de l'autre utilisateur et le dernier message en parallèle
+        const conversationsData = await Promise.all(requests.map(async (request) => {
           const otherUserId = request.student_id === user.id ? request.mentor_id : request.student_id
-          
-          // Récupérer le profil de l'autre utilisateur
-          const { data: otherProfile } = await supabase
-            .from('profiles')
-            .select('*')
-            .eq('user_id', otherUserId)
-            .single()
 
-          if (!otherProfile) continue
+          try {
+            // Récupérer le profil de l'autre utilisateur
+            const { data: otherProfile } = await supabase
+              .from('profiles')
+              .select('*')
+              .eq('user_id', otherUserId)
+              .single()
 
-          // Récupérer le dernier message
-          const { data: lastMessage } = await supabase
-            .from('messages')
-            .select('*')
-            .eq('request_id', request.id)
-            .order('created_at', { ascending: false })
-            .limit(1)
-            .single()
+            if (!otherProfile) return null
 
-          // Compter les messages non lus (messages de l'autre utilisateur non lus)
-          // Note: Pour l'instant, on compte tous les messages de l'autre utilisateur
-          // TODO: Ajouter un champ read_at dans la table messages pour un vrai suivi
-          const { count: unreadCount } = await supabase
-            .from('messages')
-            .select('*', { count: 'exact', head: true })
-            .eq('request_id', request.id)
-            .eq('sender_id', otherUserId)
+            // Récupérer le dernier message
+            const { data: lastMessage } = await supabase
+              .from('messages')
+              .select('*')
+              .eq('request_id', request.id)
+              .order('created_at', { ascending: false })
+              .limit(1)
+              .single()
 
-          conversationsData.push({
-            id: `${request.id}-${otherUserId}`,
-            requestId: request.id,
-            otherUser: {
-              id: otherUserId,
-              name: otherProfile.full_name || 'Utilisateur',
-              role: (otherProfile.role && otherProfile.role.includes('student')) ? 'student' : 'mentor',
-            },
-            lastMessage: lastMessage?.content || request.message || 'Aucun message',
-            timestamp: lastMessage?.created_at || request.created_at,
-            unread: unreadCount || 0,
-            status: request.status,
-          })
-        }
+            // Compter les messages non lus
+            const { count: unreadCount } = await supabase
+              .from('messages')
+              .select('*', { count: 'exact', head: true })
+              .eq('request_id', request.id)
+              .eq('sender_id', otherUserId)
+            // .is('read_at', null) // Uncomment when read_at is implemented
 
-        setConversations(conversationsData)
-        
+            return {
+              id: `${request.id}-${otherUserId}`,
+              requestId: request.id,
+              otherUser: {
+                id: otherUserId,
+                name: otherProfile.full_name || 'Utilisateur',
+                role: (otherProfile.role && otherProfile.role.includes('student')) ? 'student' : 'mentor',
+                avatar: otherProfile.avatar_url
+              },
+              lastMessage: lastMessage?.content || request.message || 'Aucun message',
+              timestamp: lastMessage?.created_at || request.created_at,
+              unread: unreadCount || 0,
+              status: request.status,
+            } as ConversationPreview
+          } catch (err) {
+            console.error(`Erreur pour la conversation ${request.id}:`, err)
+            return null
+          }
+        }))
+
+        // Filtrer les conversations nulles (erreurs)
+        const validConversations = conversationsData.filter((c): c is ConversationPreview => c !== null)
+
+        setConversations(validConversations)
+
         // Sélectionner la première conversation par défaut
-        if (conversationsData.length > 0 && !selectedConversation) {
-          setSelectedConversation(conversationsData[0].id)
+        if (validConversations.length > 0 && !selectedConversation) {
+          setSelectedConversation(validConversations[0].id)
         }
       } catch (error) {
         console.error('Erreur lors du chargement des conversations:', error)
@@ -313,11 +319,10 @@ export default function InboxPage() {
                               )}
                             </div>
                             <div className="mt-1">
-                              <span className={`text-xs px-2 py-0.5 rounded-full ${
-                                conversation.otherUser.role === 'mentor'
-                                  ? 'bg-indigo-100 text-indigo-700'
-                                  : 'bg-emerald-100 text-emerald-700'
-                              }`}>
+                              <span className={`text-xs px-2 py-0.5 rounded-full ${conversation.otherUser.role === 'mentor'
+                                ? 'bg-indigo-100 text-indigo-700'
+                                : 'bg-emerald-100 text-emerald-700'
+                                }`}>
                                 {conversation.otherUser.role === 'mentor' ? 'Mentor' : 'Étudiant'}
                               </span>
                             </div>

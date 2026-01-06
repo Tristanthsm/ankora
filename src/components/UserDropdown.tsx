@@ -1,30 +1,22 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAuth } from "@/lib/auth";
 import { hasRole } from "@/lib/roles";
 import {
   GraduationCap,
   MessageCircle,
   User as UserIcon,
-  LogOut,
-  Sparkles,
   BriefcaseBusiness,
   LayoutDashboard,
 } from "lucide-react";
 
 export function UserDropdown() {
-  const { user, profile, signOut } = useAuth();
+  const { user, profile } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const navigate = useNavigate();
 
-  const handleSignOut = async () => {
-    await signOut();
-    navigate("/login");
-    setIsOpen(false);
-  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -101,7 +93,7 @@ export function UserDropdown() {
                 )}
               </div>
             </div>
-            <Sparkles className="w-4 h-4 text-indigo-500" />
+
           </div>
 
           <div className="py-2">
@@ -113,11 +105,10 @@ export function UserDropdown() {
                 onClick={() => setIsOpen(false)}
               >
                 <div
-                  className={`flex h-9 w-9 items-center justify-center rounded-full border text-indigo-700 ${
-                    tab.highlight
-                      ? "bg-indigo-50 border-indigo-100"
-                      : "bg-gray-50 border-gray-100 text-gray-500"
-                  } group-hover:bg-white group-hover:border-indigo-200 group-hover:text-indigo-700 shadow-inner`}
+                  className={`flex h-9 w-9 items-center justify-center rounded-full border text-indigo-700 ${tab.highlight
+                    ? "bg-indigo-50 border-indigo-100"
+                    : "bg-gray-50 border-gray-100 text-gray-500"
+                    } group-hover:bg-white group-hover:border-indigo-200 group-hover:text-indigo-700 shadow-inner`}
                 >
                   {tab.icon}
                 </div>
@@ -131,22 +122,7 @@ export function UserDropdown() {
             ))}
           </div>
 
-          <div className="border-t border-gray-100 pt-2 mt-1 px-4">
-            <button
-              type="button"
-              onClick={(e) => {
-                e.preventDefault();
-                handleSignOut();
-              }}
-              className="flex w-full items-center justify-between gap-2 rounded-xl bg-gradient-to-r from-red-50 to-orange-50 px-4 py-3 text-sm font-semibold text-red-600 hover:from-red-100 hover:to-orange-100 transition-all"
-            >
-              <div className="flex items-center gap-2">
-                <LogOut className="w-4 h-4" />
-                Se déconnecter
-              </div>
-              <span className="text-xs text-red-500">Quitter la session</span>
-            </button>
-          </div>
+
         </div>
       )}
     </div>

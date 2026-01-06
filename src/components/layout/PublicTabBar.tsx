@@ -54,7 +54,7 @@ export default function PublicTabBar() {
   if (hiddenRoutes.some((route) => location.pathname.startsWith(route))) return null
 
   return (
-    <div className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-50 sm:top-6 sm:bottom-auto transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-[200%] sm:-translate-y-[200%]'}`}>
+    <div className={`md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50 sm:top-6 sm:bottom-auto transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-[200%] sm:-translate-y-[200%]'}`}>
       <div className="flex items-center gap-3 bg-white/80 border border-gray-200 backdrop-blur-lg py-1 px-1 rounded-full shadow-lg">
         {items.map((item) => {
           const Icon = item.icon
